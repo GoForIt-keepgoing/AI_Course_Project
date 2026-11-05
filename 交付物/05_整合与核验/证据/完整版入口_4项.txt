@@ -1,0 +1,6 @@
+  PASS  完整版入口可打开 ｜实际：HTTP 200
+  PASS  完整版脚本可加载 ｜实际：HTTP 200 / 70411 bytes
+  PASS  健康检查带 hasKey ｜实际：hasKey=False
+  PASS  未配置 Key 时明确返回 503 ｜实际：HTTP 503 / no_key
+
+合计 4 项，通过 4 项

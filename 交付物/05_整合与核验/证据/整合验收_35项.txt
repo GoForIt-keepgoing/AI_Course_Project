@@ -1,0 +1,37 @@
+  PASS  服务健康检查 ｜预期：HTTP 200 且 app=AI4En ｜实际：HTTP 200
+  PASS  静态入口 /static/workshop/index.html ｜预期：HTTP 200 且包含页面标识 ｜实际：HTTP 200
+  PASS  静态入口 /static/defense/index.html ｜预期：HTTP 200 且包含页面标识 ｜实际：HTTP 200
+  PASS  静态入口 /static/workshop/培训演示.html ｜预期：HTTP 200 且包含页面标识 ｜实际：HTTP 200
+  PASS  静态目录边界 ｜预期：编码路径不能跳出 static，HTTP 404 ｜实际：HTTP 404
+  PASS  未登录访问课例 ｜预期：HTTP 401 ｜实际：HTTP 401
+  PASS  教师登录 ｜预期：HTTP 200 且角色 teacher ｜实际：HTTP 200
+  PASS  课例包完整性 ｜预期：3 条目标 / 7 题 / 2 个活动 ｜实际：3 目标 / 7 题 / 2 活动
+  PASS  局部再生成只替换选中部分 ｜预期：流程被替换，自定义板书保留 ｜实际：HTTP 200 / 板书=True / 环节=5
+  PASS  生成失败处理 ｜预期：HTTP 502 且 preserved=true ｜实际：HTTP 502
+  PASS  失败写入生成日志 ｜预期：至少 1 条 failed ｜实际：1 条
+  PASS  记录课堂观察 ｜预期：HTTP 200 ｜实际：HTTP 200
+  PASS  观察结果只接受三档 ｜预期：HTTP 400 ｜实际：HTTP 400
+  PASS  结果页返回观察记录 ｜预期：至少 1 条 ｜实际：3 条
+  PASS  登记听写与错词 ｜预期：HTTP 200 且错 1 个 ｜实际：HTTP 200
+  PASS  错词必须在词表内 ｜预期：HTTP 400 ｜实际：HTTP 400
+  PASS  听写答题纸可打印 ｜预期：HTTP 200 且含“听写答题纸” ｜实际：HTTP 200
+  PASS  重新审核课例 ｜预期：HTTP 200 ｜实际：HTTP 200
+  PASS  创建任务草稿 ｜预期：HTTP 200 且 status=draft ｜实际：HTTP 200
+  PASS  发布任务 ｜预期：HTTP 200 且 status=ongoing ｜实际：HTTP 200
+  PASS  学生接口不返回答案 ｜预期：题目中无 answer/analysis/accept/criteria ｜实际：未泄露
+  PASS  缺题提交被拒绝 ｜预期：HTTP 400 且缺 6 项 ｜实际：HTTP 400 缺 6 项
+  PASS  完整提交 ｜预期：HTTP 200 且返回 submission_id ｜实际：HTTP 200
+  PASS  重复提交被阻止 ｜预期：HTTP 409 ｜实际：HTTP 409
+  PASS  教师可看学生原答案 ｜预期：HTTP 200 且 answers 非空 ｜实际：HTTP 200
+  PASS  生成开放题反馈草稿 ｜预期：草稿含 已完成/需检查/下一步 ｜实际：HTTP 200
+  PASS  确认反馈 ｜预期：HTTP 200 ｜实际：HTTP 200
+  PASS  要求订正 ｜预期：HTTP 200 ｜实际：HTTP 200
+  PASS  学生看到已确认反馈 ｜预期：feedback.q7 存在且 can_revise=true ｜实际：反馈=True 可订正=True
+  PASS  学生提交订正 ｜预期：HTTP 200 ｜实际：HTTP 200
+  PASS  教师看到首次与订正两版 ｜预期：history 非空且状态 resubmitted ｜实际：history=1 状态=resubmitted
+  PASS  超过截止时间不能提交 ｜预期：HTTP 400 且 code=overdue ｜实际：HTTP 400 overdue
+  PASS  家长只读绑定孩子 ｜预期：HTTP 200 且 child=张小明 ｜实际：HTTP 200 孩子=张小明
+  PASS  家长不能提交作业 ｜预期：HTTP 403 ｜实际：HTTP 403
+  PASS  其他教师不能看本人课例 ｜预期：HTTP 403 ｜实际：HTTP 403
+
+合计 35 项，通过 35 项，失败 0 项

@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Animals 动物课堂 · AI4En</title>
+  <link rel="stylesheet" href="classroom.css">
+  <script src="classroom.js" defer></script>
+</head>
+<body>
+  <header class="bar">
+    <a class="brand" href="../defense/index.html">AI4En <span>课堂答辩</span></a>
+    <div class="tools">
+      <a href="/">教学工作台 ↗</a>
+      <button id="fullscreen" type="button">⛶ 全屏</button>
+    </div>
+  </header>
+  <main>
+    <section class="intro" aria-labelledby="title">
+      <div>
+        <p class="eyebrow">三年级英语 · ANIMALS</p>
+        <h1 id="title">动物探险课</h1>
+        <p class="goal">What’s this? <span>→</span> It’s a …</p>
+      </div>
+      <div class="word-tiles" aria-label="本课词汇">
+        <span><i aria-hidden="true">🐱</i> cat</span><span><i aria-hidden="true">🐶</i> dog</span>
+        <span><i aria-hidden="true">🐼</i> panda</span><span><i aria-hidden="true">🐸</i> frog</span>
+      </div>
+    </section>
+    <section class="stage" aria-label="课堂投屏">
+      <div class="stage-bar">
+        <nav aria-label="课堂活动">
+          <a href="#games" id="games" aria-current="page">01 游戏闯关</a>
+          <a href="#lily" id="lily">02 Lily 数字人</a>
+        </nav>
+        <p id="activity-note" aria-live="polite"></p>
+      </div>
+      <iframe id="activity" title="Animals 游戏闯关" allow="microphone 'none'"></iframe>
+    </section>
+    <footer>课堂示范使用内置材料。闯关积分和句型反馈仅供本轮活动使用。</footer>
+  </main>
+</body>
+</html>

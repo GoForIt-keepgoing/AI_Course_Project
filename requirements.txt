@@ -1,0 +1,7 @@
+# 运行应用不需要任何第三方依赖，只要求 Python 3.9+（标准库：http.server、sqlite3、zipfile）。
+#
+# 仅构建脚本 tools/build_artifacts.py 与 tools/build_deck.py 需要以下可选包：
+#   pip install python-pptx openpyxl
+#
+# 应用本身不导入这些包：PPTX 由 ai4en/ppt_export.py 直接生成 OOXML；
+# 题库与验证记录 XLSX 只在构建阶段生成。
