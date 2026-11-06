@@ -1,0 +1,502 @@
+/* AI4En · 家长端模块与课堂小游戏工坊的补充样式
+ * 只新增类名，不改动 style.css 里的既有规则，避免影响其他页面。
+ */
+
+/* ---------- 家长端模块 ---------- */
+.pn-links {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.pn-link {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  text-decoration: none;
+  color: inherit;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+
+.pn-link:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(23, 55, 66, .10);
+}
+
+.pn-link-ico {
+  font-size: 22px;
+  line-height: 1.2;
+}
+
+.pn-link-title {
+  font-weight: 600;
+  font-size: 15px;
+  color: #1c3d47;
+}
+
+.pn-row-title {
+  font-weight: 600;
+  font-size: 15px;
+  color: #1c3d47;
+}
+
+.pn-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 4px 0 14px;
+}
+
+.pn-filter {
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.pn-filter.selected {
+  background: #16786d;
+  color: #fff;
+  border-color: #16786d;
+}
+
+.pn-list {
+  padding: 4px 16px;
+}
+
+.pn-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 6px 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid #eef3f2;
+}
+
+.pn-row:last-child {
+  border-bottom: none;
+}
+
+.pn-row-side {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pn-row-levels {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.pn-fb-list,
+.pn-msg-list {
+  display: grid;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.pn-fb-card,
+.pn-msg {
+  padding: 14px 16px;
+}
+
+.pn-stem {
+  margin: 8px 0 4px;
+}
+
+.pn-msg-text {
+  margin-top: 6px;
+  white-space: pre-wrap;
+  line-height: 1.7;
+}
+
+.pn-bar-row {
+  display: grid;
+  grid-template-columns: 150px 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+}
+
+.pn-bar {
+  height: 10px;
+  background: #eef3f2;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.pn-bar > i {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: #16786d;
+  min-width: 2px;
+  transition: width .3s ease;
+}
+
+.pn-bar > i.amber { background: #d99b1c; }
+.pn-bar > i.red { background: #c0504d; }
+.pn-bar > i.blue { background: #3b7fa8; }
+
+.pn-bar-label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pn-bar-num {
+  font-size: 12px;
+  color: #5b6b73;
+  white-space: nowrap;
+}
+
+.pn-week {
+  margin-bottom: 12px;
+}
+
+.pn-week textarea {
+  width: 100%;
+}
+
+.pn-ul {
+  margin: 6px 0 0;
+  padding-left: 20px;
+  line-height: 1.9;
+  color: #33505a;
+}
+
+/* 搜索 / 课例筛选 */
+.pn-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin: 2px 0 10px;
+}
+
+.pn-search {
+  flex: 1 1 240px;
+  min-width: 200px;
+}
+
+.pn-select {
+  flex: 0 0 auto;
+  min-width: 170px;
+}
+
+/* 任务详情：时间线 + 逐条反馈 */
+.pn-row-main {
+  cursor: pointer;
+}
+
+.pn-row.is-open {
+  background: #f7fbfa;
+  border-radius: 10px;
+}
+
+.pn-detail {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: minmax(200px, 1fr) minmax(240px, 1.4fr);
+  gap: 18px;
+  padding: 12px 4px 6px;
+  border-top: 1px dashed #e2ecea;
+  margin-top: 8px;
+}
+
+.pn-detail-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #255a60;
+  margin-bottom: 8px;
+}
+
+.pn-tl {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 0 4px;
+}
+
+.pn-tl-item {
+  display: flex;
+  gap: 10px;
+  padding: 0 0 12px 0;
+  position: relative;
+  font-size: 13px;
+  color: #33505a;
+}
+
+.pn-tl-item::before {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: 14px;
+  bottom: 0;
+  width: 1px;
+  background: #e2ecea;
+}
+
+.pn-tl-item:last-child::before {
+  display: none;
+}
+
+.pn-tl-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #cfdcd9;
+  margin-top: 5px;
+  flex: none;
+  z-index: 1;
+}
+
+.pn-tl-item.ok .pn-tl-dot { background: #16786d; }
+.pn-tl-item.fb .pn-tl-dot { background: #d99b1c; }
+
+.pn-fb-item {
+  border: 1px solid #eef3f2;
+  border-radius: 10px;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  background: #fff;
+}
+
+.pn-fb-text {
+  margin-top: 4px;
+  font-size: 13px;
+  line-height: 1.7;
+  color: #33505a;
+}
+
+/* 到期提醒 */
+.pn-remind {
+  margin-top: 14px;
+  border-left: 4px solid #d99b1c;
+  padding: 12px 16px;
+}
+
+.pn-remind-row {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 6px 0;
+  font-size: 14px;
+}
+
+.pn-remind-row.bad {
+  color: #c0504d;
+}
+
+.pn-remind-ico {
+  font-size: 16px;
+  line-height: 1.4;
+}
+
+/* 趋势图 */
+.pn-trend svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.pn-legend {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  margin-top: 6px;
+  font-size: 12px;
+  color: #5b6b73;
+}
+
+.pn-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 5px;
+}
+
+.pn-dot.teal { background: #16786d; }
+.pn-dot.amber { background: #d99b1c; }
+
+/* 打印周报：只留正文 */
+@media print {
+  .side,
+  .topbar,
+  .pn-tools,
+  .pn-filters,
+  .dlv-pad,
+  .toast,
+  button {
+    display: none !important;
+  }
+
+  body {
+    background: #fff;
+  }
+
+  .shell {
+    display: block;
+  }
+
+  .content {
+    padding: 0;
+    overflow: visible;
+  }
+
+  .card {
+    box-shadow: none;
+    border: 1px solid #e2ecea;
+    break-inside: avoid;
+  }
+}
+
+/* ---------- 课堂小游戏工坊 ---------- */
+/* 自带深色底，避免依赖 style.css 里投屏浮层的具体配色 */
+.lg-stage {
+  background: linear-gradient(160deg, #12363f 0%, #0e2a33 100%);
+  color: #fff;
+}
+
+.lg-stage .hint {
+  color: #cfe6e2;
+}
+
+/* lab 页面没有 style.css，这里给投屏浮层兜底定位 */
+#present.present-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+}
+
+@media (max-width: 720px) {
+  .pn-bar-row {
+    grid-template-columns: 110px 1fr;
+  }
+
+  .pn-bar-num {
+    grid-column: 1 / -1;
+  }
+
+}
+
+/* ---------- 单词快递员 ---------- */
+.present-overlay.dlv-stage {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  overflow: hidden;
+}
+
+.dlv-hud {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 18px;
+  background: #0b242b;
+  color: #eaf6f3;
+  font-size: 14px;
+  flex: none;
+}
+
+.dlv-title {
+  font-weight: 700;
+  letter-spacing: .02em;
+}
+
+.dlv-stats {
+  display: flex;
+  gap: 18px;
+  font-variant-numeric: tabular-nums;
+}
+
+.dlv-stats #dlv-lives {
+  color: #ff8f80;
+  letter-spacing: 2px;
+}
+
+.dlv-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 10px 18px;
+  padding: 8px 18px;
+  border-radius: 14px;
+  background: #fdf6e3;
+  color: #1d3f34;
+  font-size: 20px;
+  flex: none;
+}
+
+.dlv-banner b {
+  font-size: 24px;
+  letter-spacing: .01em;
+}
+
+#dlv-canvas {
+  flex: 1 1 auto;
+  width: 100%;
+  min-height: 0;
+  display: block;
+  background: #8fbf72;
+  touch-action: none;
+}
+
+.dlv-msg {
+  flex: none;
+  min-height: 26px;
+  padding: 6px 12px;
+  text-align: center;
+  font-size: 15px;
+  color: #cfe6e2;
+}
+
+.dlv-msg.ok { color: #9fe6b8; }
+.dlv-msg.bad { color: #ffb3a7; }
+
+.dlv-actions {
+  flex: none;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  padding: 4px 0 14px;
+}
+
+.dlv-pad {
+  display: none;
+  flex: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 0 10px;
+}
+
+.dlv-pad div {
+  display: flex;
+  gap: 6px;
+}
+
+.dlv-pad button {
+  width: 56px;
+  height: 44px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, .28);
+  background: rgba(255, 255, 255, .12);
+  color: #fff;
+  font-size: 16px;
+}
+
+.dlv-pad button:active {
+  background: rgba(255, 255, 255, .28);
+}
+
+@media (max-width: 820px) {
+  .dlv-pad { display: flex; }
+  .dlv-banner { font-size: 16px; }
+  .dlv-banner b { font-size: 19px; }
+  .dlv-stats { gap: 10px; font-size: 12px; }
+}

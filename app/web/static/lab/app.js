@@ -716,14 +716,29 @@ function renderM6() {
       <div class="tab" data-tab="memory">🃏 记忆翻牌</div>
       <div class="tab" data-tab="whack">🔨 打地鼠</div>
       <div class="tab" data-tab="jump">🏝 跳跳岛</div>
+      <div class="tab" data-tab="delivery">🛵 水果快递员</div>
     </div>
     <div id="m6Panel"></div>
   </div></div>`;
 }
 function initM6(root) {
   const panel = $("#m6Panel", root);
-  const games = ANIMALS.active ? ANIMALS.games : DATA.games;
+  /* 老师设置的词表优先；没设置时回落到内置示例 */
+  function resolveGames() {
+    const base = ANIMALS.active ? ANIMALS.games : DATA.games;
+    return window.WordSet ? WordSet.games(base) : base;
+  }
+  let games = resolveGames();
   let score = 0;
+
+  if (window.WordSet) {
+    WordSet.onChange = function () {
+      games = resolveGames();
+      if (window.JumpGame) JumpGame.stop();
+      clearM6Timer();
+      showMap();
+    };
+  }
 
   /* ---- 连词成句（计时 + 连击 + 提示 + 评级） ---- */
   function showSentence() {
@@ -914,17 +929,22 @@ function initM6(root) {
     { key: "pairs", icon: "🔗", name: "单词配对", sub: "英文和中文配对消除", color: "sky" },
     { key: "memory", icon: "🃏", name: "记忆翻牌", sub: "翻开卡片，记住配对", color: "peach" },
     { key: "whack", icon: "🔨", name: "打地鼠", sub: "敲对英文单词得分", color: "lemon" },
-    { key: "jump", icon: "🦘", name: "单词跳跳岛", sub: ANIMALS.active ? "跳跃收集动物词卡" : "跳跃收集水果，闯三座小岛", color: "sky" }
+    { key: "jump", icon: "🦘", name: "单词跳跳岛", sub: ANIMALS.active ? "跳跃收集动物词卡" : "跳跃收集水果，闯三座小岛", color: "sky" },
+    { key: "delivery", icon: "🛵", name: "水果快递员", sub: "收集目标单词，送回左下角 SHOP", color: "mint" }
   ];
   function go(key) {
     const tab = $$("#m6Tabs .tab", root).find(t => t.dataset.tab === key);
     if (tab) tab.click();
   }
   function showMap() {
+    const wordCount = window.WordSet ? WordSet.words().length : 0;
     panel.innerHTML = `
       <div class="adv-head">
         <div><div class="adv-title">🏝 单词冒险岛</div><div class="adv-sub">选一个关卡开始挑战，答对攒积分！</div></div>
-        <div class="adv-score">⭐ 积分 <b>${score}</b></div>
+        <div class="row" style="align-items:center;gap:10px">
+          <button class="btn" id="m6WordBtn">⚙️ 词表设置${wordCount ? "（" + wordCount + " 词）" : ""}</button>
+          <div class="adv-score">⭐ 积分 <b>${score}</b></div>
+        </div>
       </div>
       <div class="adv-grid">
         ${LEVELS.map((l, i) => `
@@ -936,8 +956,13 @@ function initM6(root) {
             <div class="adv-go">开始 ▶</div>
           </button>`).join("")}
       </div>
-      <div class="adv-foot">${ANIMALS.active ? "💡 选一关练习动物词汇。游戏结束后，可以用同一个词做问答。" : "💡 每完成一关可获得 ⭐ 积分，全部通关解锁「单词小达人」徽章"}</div>`;
+      <div class="adv-foot">${ANIMALS.active ? "💡 选一关练习动物词汇。游戏结束后，可以用同一个词做问答。" : "💡 6 个关卡都用「⚙️ 词表设置」里的单词与句子，改完立刻生效。"}</div>`;
     $$("[data-go]", panel).forEach(b => b.addEventListener("click", () => go(b.dataset.go)));
+    const wordBtn = $("#m6WordBtn", panel);
+    if (wordBtn) wordBtn.addEventListener("click", () => {
+      if (!window.WordSet) return toast("词表模块未加载");
+      WordSet.openDialog();
+    });
   }
 
   /* ---- 记忆翻牌 ---- */
@@ -1037,12 +1062,56 @@ function initM6(root) {
 
   function showJump() { JumpGame.mount(panel); }
 
+  /* ---- 水果快递员（第 6 关） ---- */
+  function showDelivery() {
+    clearM6Timer();
+    if (window.JumpGame) JumpGame.stop();
+    if (!window.Delivery) {
+      panel.innerHTML = '<div class="note">快递员模块未加载（delivery.js 缺失）。</div>';
+      return;
+    }
+    const words = window.WordSet ? WordSet.words() : [];
+    const enough = words.length >= 4;
+    panel.innerHTML = `
+      <div class="adv-head">
+        <div><div class="adv-title">🛵 水果快递员</div>
+          <div class="adv-sub">方向键 / WASD 移动，找齐 3 个目标单词，送回左下角 SHOP。被幽灵撞到掉一颗心。</div></div>
+        <div class="adv-score">⭐ 积分 <b>${score}</b></div>
+      </div>
+      <div class="note" style="margin:12px 0 16px">
+        ${enough
+          ? "本关用你设置的 " + words.length + " 个词：" + words.slice(0, 10).map(w => w.en).join(" / ") + (words.length > 10 ? " …" : "")
+          : "词表里不足 4 个词，先点右上角「⚙️ 词表设置」补几个。"}
+      </div>
+      <div class="row">
+        <button class="btn primary" id="dvStart" ${enough ? "" : "disabled"}>开始 ▶</button>
+        <button class="btn" id="dvBack">返回闯关地图</button>
+      </div>`;
+    const startBtn = $("#dvStart", panel);
+    if (startBtn) startBtn.addEventListener("click", () => {
+      const pool = WordSet.words();
+      Delivery.start({
+        words: pool,
+        onFinish: (res) => {
+          score += res.points;
+          toast("本关 " + res.score + " 分，+" + res.points + " 积分");
+          showMap();
+        }
+      });
+    });
+    const backBtn = $("#dvBack", panel);
+    if (backBtn) backBtn.addEventListener("click", () => {
+      const t = $$("#m6Tabs .tab", root).find(x => x.dataset.tab === "map");
+      if (t) t.click();
+    });
+  }
+
   $$(".tab", $("#m6Tabs", root)).forEach(t => t.addEventListener("click", () => {
     $$(".tab", $("#m6Tabs", root)).forEach(x => x.classList.remove("active"));
     t.classList.add("active");
     if (window.JumpGame) JumpGame.stop();
     clearM6Timer();
-    ({ map: showMap, sentence: showSentence, pairs: showPairs, memory: showMemory, whack: showWhack, jump: showJump })[t.dataset.tab]();
+    ({ map: showMap, sentence: showSentence, pairs: showPairs, memory: showMemory, whack: showWhack, jump: showJump, delivery: showDelivery })[t.dataset.tab]();
   }));
   showMap();
 }
