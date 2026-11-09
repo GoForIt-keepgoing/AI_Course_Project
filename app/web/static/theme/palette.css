@@ -425,3 +425,171 @@ html.workshop .brand-mark { background: var(--grad-primary); }
   html.app .lesson-card:hover { transform: none; }
   html.app .btn { transition: none; }
 }
+
+
+/* ==========================================================================
+   字体层：正文无衬线 / 标题衬线 / 强调楷体 / 课堂行楷
+   目标是在不牺牲可读性的前提下，让标题、数字与英文短句更有层次。
+   ========================================================================== */
+
+:root {
+  --font-sans: "Microsoft YaHei UI", "Microsoft YaHei", "PingFang SC", "Noto Sans SC", system-ui, sans-serif;
+  --font-serif: Georgia, "Noto Serif SC", "华文中宋", "Source Han Serif SC", "Songti SC", SimSun, serif;
+  --font-kai: Georgia, "KaiTi", "楷体", "华文楷体", "Kaiti SC", "Noto Serif SC", serif;
+  --font-brush: "STXingkai", "华文行楷", "KaiTi", "楷体", serif;
+  --font-latin: Georgia, "Times New Roman", "Noto Serif SC", serif;
+}
+
+html.app body { font-family: var(--font-sans); }
+
+/* 主应用：标题衬线、数字衬线、说明楷体 */
+html.app .side-brand .logo {
+  font-family: var(--font-serif);
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: .035em;
+}
+
+html.app .top-title .t {
+  font-family: var(--font-serif);
+  font-size: 17px;
+  letter-spacing: .02em;
+}
+
+html.app .page-head h1 {
+  font-family: var(--font-serif);
+  font-size: 27px;
+  font-weight: 700;
+  letter-spacing: .015em;
+  line-height: 1.32;
+  background: linear-gradient(120deg, #1b3b35 0%, #2f5c51 62%, #4a7c6c 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+html.app .page-head .sub {
+  font-family: var(--font-kai);
+  font-size: 13.5px;
+  letter-spacing: .02em;
+}
+
+html.app .card h3,
+html.app .lesson-card h3 {
+  font-family: var(--font-serif);
+  letter-spacing: .015em;
+}
+
+html.app .section-title {
+  font-family: var(--font-serif);
+  font-size: 14.5px;
+  letter-spacing: .02em;
+}
+
+html.app .stat .num {
+  font-family: var(--font-latin);
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: -.01em;
+  font-variant-numeric: tabular-nums;
+}
+
+html.app .lesson-card .meta .hl,
+html.app .badge-src,
+html.app .chip { letter-spacing: .01em; }
+
+html.app .login-left .brandline {
+  font-family: var(--font-serif);
+  font-size: 34px;
+  font-weight: 700;
+  letter-spacing: .03em;
+  line-height: 1.28;
+}
+
+html.app .login-left .lead {
+  font-family: var(--font-kai);
+  font-size: 14.8px;
+  line-height: 1.85;
+  letter-spacing: .01em;
+  max-width: 520px;
+}
+
+html.app .login-form h2 {
+  font-family: var(--font-serif);
+  font-size: 27px;
+  letter-spacing: .02em;
+}
+
+html.app .login-left .foot,
+html.app .side-brand .sub { letter-spacing: .05em; }
+
+/* 课堂版：行楷主标题 + 楷体目标句 */
+html.classroom h1#title {
+  font-family: var(--font-brush);
+  font-weight: 400;
+  font-size: clamp(2.9rem, 6vw, 4.15rem);
+  line-height: 1.12;
+  letter-spacing: .015em;
+  background: linear-gradient(120deg, #16342c 0%, #2f5c51 52%, #6a8f5e 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+html.classroom .eyebrow {
+  font-family: var(--font-latin);
+  font-size: .78rem;
+  letter-spacing: .26em;
+}
+
+html.classroom .goal {
+  font-family: var(--font-serif);
+  font-size: clamp(1.15rem, 2.2vw, 1.5rem);
+  letter-spacing: .01em;
+}
+
+html.classroom .word-tiles span { font-family: var(--font-serif); }
+html.classroom .word-tiles i { font-family: var(--font-latin); }
+html.classroom .brand { font-family: var(--font-serif); letter-spacing: .02em; }
+
+/* 答辩页：大标题衬线，英文小标签字距拉开 */
+html.defense h1,
+html.defense h2 {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  letter-spacing: .012em;
+}
+
+html.defense h1 { font-size: clamp(32px, 4.5vw, 66px); line-height: 1.26; }
+html.defense h2 { font-size: clamp(26px, 3.4vw, 46px); line-height: 1.3; }
+
+html.defense .kicker {
+  font-family: var(--font-latin);
+  font-size: 12.5px;
+  letter-spacing: .28em;
+}
+
+html.defense .lede { font-family: var(--font-serif); font-weight: 400; max-width: 56ch; }
+html.defense .brand { letter-spacing: -.02em; }
+
+/* 工作坊：主标题衬线，页脚署名衬线 */
+html.workshop .hero h1 {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  letter-spacing: .015em;
+  line-height: 1.34;
+}
+
+html.workshop .brand-name,
+html.workshop .site-footer .brand-name { font-family: var(--font-serif); letter-spacing: .02em; }
+
+/* 完整版：标题衬线 */
+html.lab .brand-name,
+html.lab .topbar h1,
+html.lab .hero h2 {
+  font-family: var(--font-serif);
+  letter-spacing: .015em;
+}
+
+html.lab .hero h2 { font-weight: 700; }
+
