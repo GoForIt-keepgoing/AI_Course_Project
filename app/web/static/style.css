@@ -1,20 +1,20 @@
 :root {
-  --ink: #153027;
-  --muted: #5f7268;
-  --teal: #3f8f68;
-  --teal-dark: #2c6b4c;
-  --teal-soft: #e6f4ec;
-  --amber: #9a6a1f;
+  --ink: #172a29;
+  --muted: #6b807a;
+  --teal: #4f8777;
+  --teal-dark: #2f5c51;
+  --teal-soft: #e8f1ec;
+  --amber: #a37a45;
   --amber-soft: #fbf3e2;
-  --danger: #a83a30;
+  --danger: #a8544e;
   --danger-soft: #fbeceb;
-  --line: #d9e8df;
-  --bg: #f4faf6;
+  --line: #e2e8e2;
+  --bg: #f5f7f4;
   --card: #ffffff;
   --radius: 14px;
   --shadow: 0 1px 2px rgba(21, 48, 39, .05), 0 10px 26px -18px rgba(21, 48, 39, .35);
   --side: #ffffff;
-  --side-soft: #eef8f1;
+  --side-soft: #eef5f0;
 }
 
 * { box-sizing: border-box; }
@@ -386,7 +386,7 @@ table.tbl td.actions { white-space: nowrap; }
 /* ---------------------------------------------------------------- 登录 */
 .login-wrap { min-height: 100vh; display: grid; grid-template-columns: 1.05fr .95fr; }
 .login-left {
-  background: linear-gradient(155deg, #2c6b4c 0%, #3f8f68 55%, #63ac86 100%);
+  background: linear-gradient(155deg, #2f5c51 0%, #4f8777 55%, #63ac86 100%);
   color: #fff; padding: 56px 60px; display: flex; flex-direction: column; justify-content: space-between;
   position: relative; overflow: hidden;
 }

@@ -33,13 +33,13 @@
 .pn-link-title {
   font-weight: 600;
   font-size: 15px;
-  color: #1c3d47;
+  color: #172a29;
 }
 
 .pn-row-title {
   font-weight: 600;
   font-size: 15px;
-  color: #1c3d47;
+  color: #172a29;
 }
 
 .pn-filters {
@@ -55,9 +55,9 @@
 }
 
 .pn-filter.selected {
-  background: #16786d;
+  background: #2f5c51;
   color: #fff;
-  border-color: #16786d;
+  border-color: #2f5c51;
 }
 
 .pn-list {
@@ -69,7 +69,7 @@
   grid-template-columns: 1fr auto;
   gap: 6px 12px;
   padding: 12px 0;
-  border-bottom: 1px solid #eef3f2;
+  border-bottom: 1px solid #eef2ed;
 }
 
 .pn-row:last-child {
@@ -121,7 +121,7 @@
 
 .pn-bar {
   height: 10px;
-  background: #eef3f2;
+  background: #eef2ed;
   border-radius: 999px;
   overflow: hidden;
 }
@@ -130,13 +130,13 @@
   display: block;
   height: 100%;
   border-radius: 999px;
-  background: #16786d;
+  background: #2f5c51;
   min-width: 2px;
   transition: width .3s ease;
 }
 
-.pn-bar > i.amber { background: #d99b1c; }
-.pn-bar > i.red { background: #c0504d; }
+.pn-bar > i.amber { background: #b08a54; }
+.pn-bar > i.red { background: #a8544e; }
 .pn-bar > i.blue { background: #3b7fa8; }
 
 .pn-bar-label {
@@ -164,7 +164,7 @@
   margin: 6px 0 0;
   padding-left: 20px;
   line-height: 1.9;
-  color: #33505a;
+  color: #33504c;
 }
 
 /* 搜索 / 课例筛选 */
@@ -202,7 +202,7 @@
   grid-template-columns: minmax(200px, 1fr) minmax(240px, 1.4fr);
   gap: 18px;
   padding: 12px 4px 6px;
-  border-top: 1px dashed #e2ecea;
+  border-top: 1px dashed #e2e8e2;
   margin-top: 8px;
 }
 
@@ -225,7 +225,7 @@
   padding: 0 0 12px 0;
   position: relative;
   font-size: 13px;
-  color: #33505a;
+  color: #33504c;
 }
 
 .pn-tl-item::before {
@@ -235,7 +235,7 @@
   top: 14px;
   bottom: 0;
   width: 1px;
-  background: #e2ecea;
+  background: #e2e8e2;
 }
 
 .pn-tl-item:last-child::before {
@@ -252,11 +252,11 @@
   z-index: 1;
 }
 
-.pn-tl-item.ok .pn-tl-dot { background: #16786d; }
-.pn-tl-item.fb .pn-tl-dot { background: #d99b1c; }
+.pn-tl-item.ok .pn-tl-dot { background: #2f5c51; }
+.pn-tl-item.fb .pn-tl-dot { background: #b08a54; }
 
 .pn-fb-item {
-  border: 1px solid #eef3f2;
+  border: 1px solid #eef2ed;
   border-radius: 10px;
   padding: 10px 12px;
   margin-bottom: 8px;
@@ -267,13 +267,13 @@
   margin-top: 4px;
   font-size: 13px;
   line-height: 1.7;
-  color: #33505a;
+  color: #33504c;
 }
 
 /* 到期提醒 */
 .pn-remind {
   margin-top: 14px;
-  border-left: 4px solid #d99b1c;
+  border-left: 4px solid #b08a54;
   padding: 12px 16px;
 }
 
@@ -286,7 +286,7 @@
 }
 
 .pn-remind-row.bad {
-  color: #c0504d;
+  color: #a8544e;
 }
 
 .pn-remind-ico {
@@ -318,8 +318,8 @@
   margin-right: 5px;
 }
 
-.pn-dot.teal { background: #16786d; }
-.pn-dot.amber { background: #d99b1c; }
+.pn-dot.teal { background: #2f5c51; }
+.pn-dot.amber { background: #b08a54; }
 
 /* 打印周报：只留正文 */
 @media print {
@@ -348,7 +348,7 @@
 
   .card {
     box-shadow: none;
-    border: 1px solid #e2ecea;
+    border: 1px solid #e2e8e2;
     break-inside: avoid;
   }
 }
@@ -361,7 +361,7 @@
 }
 
 .lg-stage .hint {
-  color: #cfe6e2;
+  color: #d3e3da;
 }
 
 /* lab 页面没有 style.css，这里给投屏浮层兜底定位 */
@@ -452,7 +452,7 @@
   padding: 6px 12px;
   text-align: center;
   font-size: 15px;
-  color: #cfe6e2;
+  color: #d3e3da;
 }
 
 .dlv-msg.ok { color: #9fe6b8; }

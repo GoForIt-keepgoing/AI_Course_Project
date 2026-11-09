@@ -633,7 +633,7 @@ function pnTrendCard(data) {
     var x = padX + slot * i + (slot - barW) / 2;
     var y = H - padY - h;
     return '<rect x="' + x.toFixed(1) + '" y="' + y.toFixed(1) + '" width="' + barW.toFixed(1) +
-      '" height="' + Math.max(1, h).toFixed(1) + '" rx="4" fill="#16786d" opacity=".85"></rect>' +
+      '" height="' + Math.max(1, h).toFixed(1) + '" rx="4" fill="#4f8777" opacity=".85"></rect>' +
       '<text x="' + (x + barW / 2).toFixed(1) + '" y="' + (H - padY + 12) + '" font-size="8" text-anchor="middle" fill="#7b9198">' +
       esc(k.replace(/^\d{4}\s*年\s*第\s*/, '').replace(/\s*周$/, 'w')) + '</text>';
   }).join('');

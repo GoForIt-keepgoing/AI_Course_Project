@@ -1,9 +1,9 @@
 :root {
   color-scheme: light;
   --ink: #14342e;
-  --paper: #f8f4e7;
-  --leaf: #17634f;
-  --line: #d8ddcd;
+  --paper: #f7f5ec;
+  --leaf: #35685a;
+  --line: #e2e5d8;
   font-family: "Trebuchet MS", "Microsoft YaHei", sans-serif;
   color: var(--ink);
   background: var(--paper);
