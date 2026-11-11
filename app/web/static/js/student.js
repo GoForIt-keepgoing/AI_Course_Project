@@ -71,7 +71,11 @@ function studentOverviewView(data) {
   } else {
     nextCard = '<div class="card stu-next stu-done"><div class="row" style="gap:14px">' +
       '<div class="stu-done-mark">✓</div><div><h3>当前没有待办</h3>' +
-      '<div class="card-sub" style="margin:4px 0 0">可以翻翻错题本，或者看看老师确认过的反馈。</div></div></div>' +
+      '<div class="card-sub" style="margin:4px 0 0">今天的任务都交了。可以用几分钟把学过的再看一遍。</div></div></div>' +
+      '<ul class="stu-empty-list">' +
+      '<li>翻一遍错题本，挑一道题重新读题</li>' +
+      '<li>读一条老师确认过的反馈，试着改一句</li>' +
+      '<li>把今天的单词说给家人听</li></ul>' +
       '<div class="row" style="margin-top:14px"><a class="btn" href="#/student/wrong">去错题本</a>' +
       '<a class="btn" href="#/student/records">看订正记录</a></div></div>';
   }

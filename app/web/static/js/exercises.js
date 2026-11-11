@@ -46,8 +46,8 @@ function exEditorCard(item, i) {
       var letter = String.fromCharCode(65 + j);
       return '<div class="ex-opt"><span class="opt-key">' + letter + '</span>' +
         '<input class="input" data-state="ex" data-bind="items.' + i + '.options.' + j + '" value="' + esc(opt) + '">' +
-        '<label><input type="radio" name="exans-' + i + '" data-state="ex" data-bind="items.' + i + '.answer" value="' + letter + '"' +
-        (item.answer === letter ? ' checked' : '') + '> 正确答案</label></div>';
+        '<label class="ans-flag" title="设为正确答案"><input type="radio" name="exans-' + i + '" data-state="ex" data-bind="items.' + i + '.answer" value="' + letter + '"' +
+        (item.answer === letter ? ' checked' : '') + '><span aria-hidden="true">✓</span></label></div>';
     }).join('') + '</div>';
   } else if (type === 'fill') {
     inner = '<div class="form-grid cols-2"><div class="field"><label>参考答案</label>' +
@@ -71,15 +71,15 @@ function exEditorCard(item, i) {
     }).join('') + '</select>' +
     '<input class="input sm" style="width:90px" data-state="ex" data-bind="items.' + i + '.tag" value="' + esc(item.tag || '') + '" placeholder="标签">' +
     '<input class="input sm" style="width:130px" data-state="ex" data-bind="items.' + i + '.target" value="' + esc(item.target || '') + '" placeholder="目标词句"></div>' +
-    '<div class="row">' + btn('上移', 'move-ex', 'data-i="' + i + '" data-dir="-1"', 'sm ghost') +
-    btn('下移', 'move-ex', 'data-i="' + i + '" data-dir="1"', 'sm ghost') +
-    btn('删除', 'del-ex', 'data-i="' + i + '"', 'sm danger') + '</div></div>' +
-    '<div class="form-grid"><div class="field"><label>题干</label><textarea class="textarea" rows="2" data-state="ex" data-bind="items.' + i + '.stem">' + esc(item.stem || '') + '</textarea></div>' +
+    '<div class="row">' + btn('↑', 'move-ex', 'data-i="' + i + '" data-dir="-1" title="上移"', 'sm ghost icon-btn') +
+    btn('↓', 'move-ex', 'data-i="' + i + '" data-dir="1" title="下移"', 'sm ghost icon-btn') +
+    btn('×', 'del-ex', 'data-i="' + i + '" title="删除"', 'sm ghost icon-btn danger-text') + '</div></div>' +
+    '<div class="form-grid"><div class="field"><label>题干</label><textarea class="textarea" rows="1" data-state="ex" data-bind="items.' + i + '.stem">' + esc(item.stem || '') + '</textarea></div>' +
     inner +
-    '<div class="form-grid cols-2" style="margin-top:10px">' +
+    '<details class="ex-more"><summary>提示与解析</summary><div class="form-grid cols-2">' +
     '<div class="field"><label>提示（学生点“提示”时显示）</label><input class="input" data-state="ex" data-bind="items.' + i + '.hint" value="' + esc(item.hint || '') + '"></div>' +
     '<div class="field"><label>解析（教师答案页）</label><input class="input" data-state="ex" data-bind="items.' + i + '.analysis" value="' + esc(item.analysis || '') + '"></div>' +
-    '</div></div></div>';
+    '</div></details></div></div>';
 }
 
 ACTIONS['ex-type'] = function (el) {

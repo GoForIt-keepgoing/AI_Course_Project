@@ -102,7 +102,7 @@ function levelChip(level) {
 function pageHead(title, sub, actions) {
   return '<div class="page-head"><div><h1>' + title + '</h1>' +
     (sub ? '<div class="sub">' + sub + '</div>' : '') + '</div>' +
-    '<div class="row">' + (actions || '') + '</div></div>';
+    '<div class="page-actions">' + (actions || '') + '</div></div>';
 }
 function banner(text, kind, icon) {
   return '<div class="banner ' + (kind || 'info') + '"><span class="icon">' + (icon || '·') + '</span><div>' + text + '</div></div>';
@@ -188,9 +188,9 @@ function shellNav() {
 function shell(content) {
   var role = S.user.role;
   var meta = pageMeta();
-  var foot = role === 'teacher' ? '教师主导 · 内容可编辑 · 结果可核对'
-    : role === 'student' ? '提交后由老师确认反馈，可完成一次订正'
-      : '只读 · 仅显示本人孩子的任务与已确认反馈';
+  var foot = role === 'teacher' ? '教师主导 · 结果可核对'
+    : role === 'student' ? '老师确认后可见反馈'
+      : '只读 · 仅本人孩子';
   return '<div class="shell"><aside class="side">' +
       '<a class="side-brand" href="#/"><span class="logo">AI4En</span><span class="sub">英语教学助手</span></a>' +
       '<nav class="side-nav">' + shellNav() + '</nav>' +

@@ -29,7 +29,7 @@
       var key = state.user && state.user.role !== 'teacher' ? 'learning' : 'teaching';
       if (route[0] === 'review' || /exercises|tasks|results/.test(route[2] || '')) key = 'learning';
       if (route[2] === 'activities' || route[0] === 'studio') key = 'animals';
-      document.querySelectorAll('.page-head').forEach(function (head) { add(head, key, 'heading-art'); });
+      /* 工作区页头不放装饰插画：标题与动作需要干净的横向空间 */
     }
     if (root.classList.contains('classroom')) add(document.querySelector('.intro'), 'animals', 'classroom-art');
     if (root.classList.contains('workshop')) {

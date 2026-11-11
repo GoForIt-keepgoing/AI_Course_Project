@@ -85,7 +85,7 @@ function lessonHeader(lesson, actions) {
     '<h1>' + esc(lesson.title) + ' ' + lessonChip(lesson.status) + '</h1>' +
     '<div class="sub">' + esc(lesson.grade) + ' · 主题 ' + esc(lesson.topic) + ' · ' + esc(lesson.duration) + ' 分钟 · 目标词 ' +
     esc((lesson.vocab || []).join(' / ')) + '</div></div>' +
-    '<div class="row">' + actions + '</div></div>';
+    '<div class="page-actions">' + actions + '</div></div>';
 }
 
 /* ---------------------------------------------------------------- 教案备课 */
@@ -103,11 +103,11 @@ function planTab(lesson) {
 
   var flowHtml = flow.map(function (row, i) {
     return '<tr data-flow="' + i + '">' +
-      '<td><input class="stage" data-state="plan" data-bind="flow.' + i + '.stage" value="' + esc(row.stage || '') + '"></td>' +
-      '<td><input class="mins" data-state="plan" data-bind="flow.' + i + '.minutes" value="' + esc(row.minutes || '') + '"></td>' +
-      '<td><textarea rows="2" data-state="plan" data-bind="flow.' + i + '.teacher">' + esc(row.teacher || '') + '</textarea></td>' +
-      '<td><textarea rows="2" data-state="plan" data-bind="flow.' + i + '.student">' + esc(row.student || '') + '</textarea></td>' +
-      '<td><textarea rows="2" data-state="plan" data-bind="flow.' + i + '.check">' + esc(row.check || '') + '</textarea></td>' +
+      '<td data-label="环节"><input class="stage" data-state="plan" data-bind="flow.' + i + '.stage" value="' + esc(row.stage || '') + '"></td>' +
+      '<td data-label="时间"><input class="mins" data-state="plan" data-bind="flow.' + i + '.minutes" value="' + esc(row.minutes || '') + '"></td>' +
+      '<td data-label="教师活动"><textarea rows="2" data-state="plan" data-bind="flow.' + i + '.teacher">' + esc(row.teacher || '') + '</textarea></td>' +
+      '<td data-label="学生活动"><textarea rows="2" data-state="plan" data-bind="flow.' + i + '.student">' + esc(row.student || '') + '</textarea></td>' +
+      '<td data-label="检查方式"><textarea rows="2" data-state="plan" data-bind="flow.' + i + '.check">' + esc(row.check || '') + '</textarea></td>' +
       '<td class="actions">' + btn('删除', 'del-flow', 'data-i="' + i + '"', 'sm ghost') + '</td></tr>';
   }).join('');
 
@@ -126,9 +126,14 @@ function planTab(lesson) {
       btn('审核通过', 'approve-lesson', '', 'primary')) +
     lessonTabs(lesson, 'plan') +
     (notice ? '<div style="margin-bottom:16px">' + notice + '</div>' : '') +
-    '<div class="stack">' +
+    '<div class="plan-layout"><nav class="plan-rail" aria-label="教案分区">' +
+      PLAN_SECTIONS.map(function (s) {
+        return '<a href="javascript:void 0" data-act="plan-jump" data-sec="' + s[0] + '"' +
+          (s[0] === 'sec-cond' ? ' class="active"' : '') + '>' + s[1] + '</a>';
+      }).join('') +
+    '</nav><div class="plan-main stack">' +
 
-    '<div class="card"><div class="section-title"><span class="dot"></span>教学条件</div>' +
+    '<div class="card" id="sec-cond"><div class="section-title"><span class="dot"></span>教学条件</div>' +
       '<div class="card-sub">缺少必填项时会在对应位置提示；没有目标依据不会生成空白课例。</div>' +
       '<div class="form-grid cols-3">' +
         '<div class="field"><label>年级</label><input class="input" data-state="cond" data-bind="grade" value="' + esc(S.cond.grade) + '"></div>' +
@@ -142,7 +147,7 @@ function planTab(lesson) {
       '<span class="tiny muted">保存后教案会回到草稿状态，发布前需重新审核。</span></div>' +
     '</div>' +
 
-    '<div class="card"><div class="section-title"><span class="dot"></span>生成与审核</div>' +
+    '<div class="card" id="sec-gen"><div class="section-title"><span class="dot"></span>生成与审核</div>' +
       '<div class="row" style="margin-bottom:10px">' + srcBadge(lesson.plan.source) +
         '<span class="tiny muted">' + esc(modelNote) + '</span>' +
         '<span class="tiny muted">· 目标 ' + objectives.length + ' 条 · 流程 ' + flow.length + ' 个环节 · 合计 ' + total + ' 分钟</span></div>' +
@@ -154,7 +159,7 @@ function planTab(lesson) {
         '<span class="tiny muted">生成结果是候选内容，需逐条核对；生成成功不等于已通过教学审核。</span></div>' +
     '</div>' +
 
-    '<div class="card"><div class="section-title"><span class="dot"></span>学习目标 <span class="tiny muted">（不超过三项）</span></div>' +
+    '<div class="card" id="sec-obj"><div class="section-title"><span class="dot"></span>学习目标 <span class="tiny muted">（不超过三项）</span></div>' +
       '<div class="obj-list">' + (objHtml || '<div class="tiny muted">还没有目标，点“生成教案草稿”或手动添加。</div>') + '</div>' +
       '<div class="row" style="margin-top:10px">' + btn('添加目标', 'add-obj', '', 'sm') +
       btn('重新生成目标', 'regen-section', 'data-section="objectives"', 'sm') +
@@ -163,13 +168,13 @@ function planTab(lesson) {
 
     lessonCheckCard(lesson) +
 
-    '<div class="card"><div class="section-title"><span class="dot"></span>重点与难点</div>' +
+    '<div class="card" id="sec-key"><div class="section-title"><span class="dot"></span>重点与难点</div>' +
       '<div class="form-grid cols-2">' +
       '<div class="field"><label>重点</label><textarea class="textarea" rows="4" data-state="plan" data-bind="key_points">' + esc(plan.key_points || '') + '</textarea></div>' +
       '<div class="field"><label>难点</label><textarea class="textarea" rows="4" data-state="plan" data-bind="difficulties">' + esc(plan.difficulties || '') + '</textarea></div>' +
       '</div></div>' +
 
-    '<div class="card"><div class="section-title"><span class="dot"></span>教学流程</div>' +
+    '<div class="card" id="sec-flow"><div class="section-title"><span class="dot"></span>教学流程</div>' +
       '<div class="card-sub">每个环节写明学生做什么、教师怎样检查；时间合计应与课时一致。</div>' +
       '<div class="tbl-wrap"><table class="tbl flow-table"><thead><tr><th style="width:110px">环节</th><th style="width:70px">时间</th>' +
       '<th>教师活动</th><th>学生活动</th><th>检查方式</th><th style="width:60px"></th></tr></thead><tbody>' +
@@ -180,7 +185,7 @@ function planTab(lesson) {
       '<span class="tiny muted">当前合计 ' + total + ' 分钟 · 只替换这一部分，目标和板书保留</span></div>' +
     '</div>' +
 
-    '<div class="card"><div class="section-title"><span class="dot"></span>板书、作业与材料</div>' +
+    '<div class="card" id="sec-board"><div class="section-title"><span class="dot"></span>板书、作业与材料</div>' +
       '<div class="form-grid cols-2">' +
       '<div class="field"><label>板书建议</label><textarea class="textarea" rows="3" data-state="plan" data-bind="board">' + esc(plan.board || '') + '</textarea></div>' +
       '<div class="field"><label>课后任务</label><textarea class="textarea" rows="3" data-state="plan" data-bind="homework">' + esc(plan.homework || '') + '</textarea></div>' +
@@ -188,12 +193,32 @@ function planTab(lesson) {
       '<div class="field"><label>设计说明</label><textarea class="textarea" rows="2" data-state="plan" data-bind="rationale">' + esc(plan.rationale || '') + '</textarea></div>' +
       '</div></div>' +
 
-    '<div class="card"><div class="row" style="justify-content:space-between">' +
+    '<div class="card save-bar"><div class="row" style="justify-content:space-between">' +
       '<span class="tiny muted">保存会覆盖当前草稿；审核通过后才允许发布任务。</span>' +
       '<span class="row">' + btn('保存草稿', 'save-plan', '', 'primary') +
       btn('审核通过', 'approve-lesson') + '</span></div></div>' +
-    '</div>';
+    '</div></div>';
 }
+
+var PLAN_SECTIONS = [
+  ['sec-cond', '教学条件'],
+  ['sec-gen', '生成与审核'],
+  ['sec-obj', '学习目标'],
+  ['sec-check', '内容检查'],
+  ['sec-key', '重点与难点'],
+  ['sec-flow', '教学流程'],
+  ['sec-board', '板书与作业']
+];
+
+ACTIONS['plan-jump'] = function (el) {
+  var sec = el.getAttribute('data-sec');
+  var target = document.getElementById(sec);
+  if (!target) return;
+  target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  Array.prototype.forEach.call(document.querySelectorAll('.plan-rail a'), function (a) {
+    a.classList.toggle('active', a === el);
+  });
+};
 
 function newLessonModal() {
   modal('<h3>新建课例</h3><div class="modal-sub">填写教学条件，生成后可以继续修改；所有内容围绕同一份课例展开。</div>' +
@@ -441,7 +466,7 @@ function lessonCheckCard(lesson) {
   var chips = vocab.concat([]).map(function (w) { return chip(w, 'plain'); }).join(' ');
   var sentenceChips = (lesson.sentences || []).map(function (s) { return chip(s, 'plain'); }).join(' ');
 
-  return '<div class="card"><div class="section-title"><span class="dot"></span>内容检查</div>' +
+  return '<div class="card" id="sec-check"><div class="section-title"><span class="dot"></span>内容检查</div>' +
     '<div class="card-sub">重点词句单独列出；词表以外的英文词只做提示，由教师决定替换或保留。</div>' +
     '<div class="row" style="margin-bottom:8px"><span class="tiny muted" style="width:64px">目标词</span>' + chips + '</div>' +
     '<div class="row" style="margin-bottom:12px"><span class="tiny muted" style="width:64px">目标句</span>' + sentenceChips + '</div>' +

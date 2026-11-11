@@ -601,3 +601,30 @@
   color: #235c47;
 }
 
+
+
+.stu-empty-list {
+  list-style: none;
+  margin: 14px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+.stu-empty-list li {
+  position: relative;
+  padding-left: 18px;
+  font-size: 13.5px;
+  color: #4b625c;
+  line-height: 1.6;
+}
+.stu-empty-list li::before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 9px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #9dc8b6;
+}
+

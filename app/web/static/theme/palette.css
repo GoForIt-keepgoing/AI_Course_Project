@@ -647,3 +647,202 @@ html.workshop .sample-card small { font-size: 13px; }
 
 html.lab .col-sub,
 html.lab .pill { font-size: 13px; }
+
+
+/* ==========================================================================
+   结构与排版：页头两行、教案锚点、练习卡瘦身、间距节奏
+   ========================================================================== */
+
+html.app .page-head { display: block; margin-bottom: 20px; }
+html.app .page-head h1 { margin-bottom: 6px; }
+html.app .page-actions { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+
+html.app .stack { gap: 20px; }
+html.app .card { padding: 20px 22px; }
+html.app .form-grid { gap: 14px 16px; }
+html.app .section-title { margin-bottom: 8px; }
+html.app .grid { align-items: stretch; }
+html.app .grid > .card { height: 100%; }
+
+/* 教案：左侧锚点 + 右侧内容 */
+html.app .plan-layout {
+  display: grid;
+  grid-template-columns: 168px minmax(0, 1fr);
+  gap: 26px;
+  align-items: start;
+}
+html.app .plan-rail {
+  position: sticky;
+  top: 86px;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding: 2px 0;
+}
+html.app .plan-rail a {
+  display: block;
+  padding: 7px 10px;
+  border-left: 2px solid transparent;
+  border-radius: 0 6px 6px 0;
+  font-size: 13.5px;
+  color: var(--muted);
+  text-decoration: none;
+}
+html.app .plan-rail a:hover { background: #f1f3ec; color: var(--ink); }
+html.app .plan-rail a.active { background: #f1f4ec; border-left-color: #2f5c51; color: var(--ink); }
+
+html.app .save-bar { position: sticky; bottom: 16px; z-index: 5; }
+
+/* 练习卡：单选勾、折叠、图标按钮 */
+html.app .ex-opt { grid-template-columns: 18px minmax(0, 1fr) 22px; }
+html.app .ans-flag {
+  width: 22px; height: 22px; border: 1px solid #cfd9cf; border-radius: 50%;
+  display: grid; place-items: center; color: transparent; font-size: 12px;
+}
+html.app .ans-flag input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+html.app .ans-flag:has(input:checked) { background: #2f5c51; border-color: #2f5c51; color: #fff; }
+html.app .ex-opt:has(input[type=radio]:checked) { background: #f5f8f3; border: 1px solid #d9e4d9; }
+html.app .ex-more { margin-top: 10px; border-top: 1px solid #eef1ea; padding-top: 8px; }
+html.app .ex-more summary { cursor: pointer; font-size: 13px; color: var(--muted); list-style: none; }
+html.app .ex-more summary::-webkit-details-marker { display: none; }
+html.app .ex-more summary::before { content: "＋"; margin-right: 6px; color: #7d8f86; }
+html.app .ex-more[open] summary::before { content: "－"; }
+html.app .ex-more .form-grid { margin-top: 10px; }
+html.app .icon-btn { width: 28px; padding: 0; justify-content: center; }
+html.app .danger-text { color: #a8544e; }
+
+html.app textarea.textarea { field-sizing: content; min-height: 44px; max-height: 260px; }
+
+@media (max-width: 980px) {
+  html.app .plan-rail { display: none; }
+  html.app .plan-layout { grid-template-columns: 1fr; gap: 0; }
+  html.app .save-bar { position: static; }
+  html.app .page-actions .btn { flex: 0 0 auto; }
+}
+
+@media (max-width: 760px) {
+  html.app .tbl-wrap table.tbl { min-width: 640px; }
+  html.app .page-actions { gap: 6px; }
+  html.app .page-actions .btn { height: 34px; }
+}
+
+
+
+/* 表格：去表头底色，只留下边线 */
+html.app table.tbl th {
+  background: transparent;
+  border-bottom: 1px solid #dfe5dc;
+  color: #5c6f68;
+  font-weight: 600;
+}
+html.app table.tbl td { border-bottom: 1px solid #eef1ea; }
+
+/* 保存条：浮起时与内容分开 */
+html.app .save-bar {
+  box-shadow: 0 1px 0 #e8ece4, 0 12px 30px -26px rgba(27, 43, 40, .55);
+}
+
+
+
+/* 页头回到单行：标题左、动作右；窄屏动作独占一行 */
+html.app .page-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 10px 20px;
+}
+html.app .page-head > div:first-child { flex: 1 1 420px; min-width: 280px; }
+html.app .page-actions {
+  margin-top: 0;
+  margin-left: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+@media (max-width: 900px) {
+  html.app .page-actions { width: 100%; margin-left: 0; }
+}
+
+/* 教学流程：手机上表格转卡片 */
+@media (max-width: 760px) {
+  html.app table.flow-table { min-width: 0; display: block; }
+  html.app table.flow-table thead { display: none; }
+  html.app table.flow-table tbody { display: block; }
+  html.app table.flow-table tr {
+    display: block;
+    border: 1px solid #e4e8e0;
+    border-radius: 10px;
+    padding: 8px 10px;
+    margin-bottom: 10px;
+    background: #fbfcf9;
+  }
+  html.app table.flow-table td {
+    display: block;
+    border: 0;
+    padding: 4px 0;
+  }
+  html.app table.flow-table td::before {
+    content: attr(data-label);
+    display: block;
+    font-size: 12px;
+    color: #6b7d75;
+    margin-bottom: 2px;
+  }
+  html.app table.flow-table td.actions::before { display: none; }
+  html.app table.flow-table td.actions { text-align: right; }
+}
+
+
+
+/* 教学流程：桌面自适应但限高，手机上固定高度可滚动 */
+html.app .flow-table textarea.textarea {
+  field-sizing: content;
+  max-height: 140px;
+}
+@media (max-width: 760px) {
+  html.app .flow-table textarea.textarea {
+    field-sizing: fixed;
+    height: 72px;
+    max-height: 72px;
+  }
+}
+
+
+
+/* 教学流程卡片：环节/时间并排，其余整行 */
+@media (max-width: 760px) {
+  html.app table.flow-table tr {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 88px;
+    gap: 6px 10px;
+  }
+  html.app table.flow-table td { padding: 0; }
+  html.app table.flow-table td:nth-child(1) { grid-column: 1; }
+  html.app table.flow-table td:nth-child(2) { grid-column: 2; }
+  html.app table.flow-table td:nth-child(3),
+  html.app table.flow-table td:nth-child(4),
+  html.app table.flow-table td:nth-child(5),
+  html.app table.flow-table td.actions { grid-column: 1 / -1; }
+  html.app table.flow-table textarea.textarea { height: 56px; max-height: 56px; }
+  html.app table.flow-table td.actions { padding-top: 4px; }
+}
+
+
+
+@media (max-width: 760px) {
+  html.app table.flow-table tr { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  html.app table.flow-table td:nth-child(2) { grid-column: 2; }
+  html.app table.flow-table td:nth-child(3) { grid-column: 1; }
+  html.app table.flow-table td:nth-child(4) { grid-column: 2; }
+  html.app table.flow-table td:nth-child(5),
+  html.app table.flow-table td.actions { grid-column: 1 / -1; }
+
+  html.app .form-grid.cols-3 { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  html.app .form-grid.cols-3 .field:nth-child(3),
+  html.app .form-grid.cols-3 .field:nth-child(4),
+  html.app .form-grid.cols-3 .field:nth-child(5),
+  html.app .form-grid.cols-3 .field:nth-child(6) { grid-column: 1 / -1; }
+}
+
