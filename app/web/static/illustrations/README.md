@@ -1,10 +1,12 @@
 # 页面插画素材
 
-三张插画使用内置 imagegen 工具生成，保存在本目录，均为本地 PNG 素材，运行时无需联网。图片通过 illustrations.js 按页面语境插入；作为装饰设置空 alt 和 aria-hidden，不参与题目、评分和导出。移动端缩小，打印时隐藏。
+三张插画使用内置 imagegen 工具生成，保存在本目录，均为本地 WebP 素材（1200×800，每张约 100 KB），运行时无需联网。图片通过 illustrations.js 按页面语境插入；学生概览页头的插画由 student.js 直接写入。作为装饰设置空 alt 和 aria-hidden，不参与题目、评分和导出；统一 lazy 加载，移动端缩小，打印时隐藏。
 
-- teaching.png：登录、教师工作台、备课、资源与指南。
-- animals.png：课堂活动、拓展工具、动物课堂与答辩封面。
-- learning.png：练习、发布、反馈、学生与家长页面。
+- teaching.webp：登录、教师工作台、备课、资源与指南。
+- animals.webp：课堂活动、拓展工具、动物课堂与答辩封面。
+- learning.webp：练习、发布、反馈、学生概览与家长页面。
+
+> 单词与词卡的小图（`/static/words/*.webp`）是另一套素材，来源与许可见 `static/words/CREDITS.md`。
 
 ## 原始生成提示词
 

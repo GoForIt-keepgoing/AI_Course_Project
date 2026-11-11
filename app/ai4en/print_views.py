@@ -44,7 +44,10 @@ li { margin: 2px 0; }
 .cards { display: flex; flex-wrap: wrap; gap: 8px; }
 .card { width: 84mm; border: 1px dashed #8fa79c; border-radius: 6px; padding: 10px 12px; page-break-inside: avoid; }
 .card .w { font-size: 17pt; font-weight: 700; letter-spacing: .02em; }
-.card .emoji { font-size: 22pt; float: right; }
+.card .ct { float: right; width: 22mm; height: 22mm; object-fit: contain; border-radius: 50%;
+              background: #f6f2e7; padding: 2.5mm; box-sizing: border-box; }
+.card .ct-letter { display: flex; align-items: center; justify-content: center; border-radius: 50%;
+                  background: #eef4ee; color: #2f5c51; font-family: Georgia, serif; font-size: 20pt; font-weight: 700; }
 .card .zh { color: #5c6f68; font-size: 9.5pt; }
 .card .s { font-size: 9pt; margin-top: 6px; }
 .q { margin: 10px 0; page-break-inside: avoid; }
@@ -188,9 +191,14 @@ def answers_page(task_id, user):
 def cards_page(lesson_id, user):
     lesson, bundle = _lesson_for_print(lesson_id, user)
     cards = bundle["materials"].get("cards", {}).get("data") or {}
+    def art(c):
+        if c.get("image"):
+            return "<img class=\"ct\" src=\"" + esc(c["image"]) + "\" alt=\"\" width=\"96\" height=\"96\">"
+        return "<div class=\"ct ct-letter\">" + esc(c.get("initial", "")) + "</div>"
+
     word_cards = "".join(
-        "<div class=\"card\"><div class=\"emoji\">" + esc(c.get("emoji", "")) + "</div>"
-        "<div class=\"w\">" + esc(c.get("word", "")) + "</div><div class=\"zh\">" + esc(c.get("zh", "")) + "</div>"
+        "<div class=\"card\">" + art(c)
+        + "<div class=\"w\">" + esc(c.get("word", "")) + "</div><div class=\"zh\">" + esc(c.get("zh", "")) + "</div>"
         "<div class=\"s\">" + esc(c.get("sentence", "")) + "</div></div>"
         for c in cards.get("word_cards") or [])
     talk = cards.get("talk_card") or {}

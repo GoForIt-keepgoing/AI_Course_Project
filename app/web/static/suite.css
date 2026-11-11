@@ -628,3 +628,165 @@
   background: #9dc8b6;
 }
 
+/* ---------------------------------------------------------------- 学生端：页头插画 / 学习报告 / 单词卡 */
+html.app .page-head .stu-head-art {
+  width: 118px;
+  height: 80px;
+  object-fit: cover;
+  object-position: 50% 30%;
+  border-radius: 10px;
+  flex: 0 0 auto;
+  box-shadow: 0 8px 20px -14px rgba(31, 66, 60, .55);
+}
+
+html.app .page-head > .row .stu-head-art { order: -1; }
+
+.stu-legend {
+  display: flex;
+  gap: 16px;
+  margin: 0 0 8px;
+  font-size: 12.5px;
+  color: var(--muted);
+}
+.stu-legend span { display: inline-flex; align-items: center; }
+.stu-legend i { width: 10px; height: 10px; border-radius: 3px; margin-right: 6px; }
+.stu-legend .lg-a { background: #4f8777; }
+.stu-legend .lg-b { background: #b99a6b; }
+
+.stu-week {
+  display: grid;
+  grid-template-columns: 62px minmax(0, 1fr) 82px;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 0;
+}
+.stu-week-label { font-size: 12.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.stu-week-bars { display: grid; gap: 4px; }
+.stu-week-bars .stu-bar { height: 7px; }
+.stu-week-bars .stu-bar.alt i { background: #b99a6b; }
+.stu-week-val { font-size: 12.5px; color: var(--muted); text-align: right; font-variant-numeric: tabular-nums; }
+
+.word-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 12px;
+}
+.word-card {
+  background: var(--grad-card);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.word-card summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 16px 16px 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+.word-card summary::-webkit-details-marker { display: none; }
+.word-card summary:focus-visible { outline: 2px solid var(--teal-dark); outline-offset: -2px; }
+.word-thumb {
+  width: 62px;
+  height: 62px;
+  padding: 9px;
+  box-sizing: border-box;
+  border-radius: 50%;
+  display: block;
+  object-fit: contain;
+  background: #f6f2e7;
+}
+.word-initial {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #eef4ee;
+  color: var(--teal-dark);
+  font-family: var(--font-serif);
+  font-size: 22px;
+  font-weight: 700;
+}
+.word-en { font-family: var(--font-serif); font-size: 22px; font-weight: 600; letter-spacing: .01em; }
+.word-hint { font-size: 12px; color: var(--muted); }
+.word-card[open] .word-hint { display: none; }
+.word-card[open] { border-color: #cfe0d6; }
+.word-body { border-top: 1px dashed var(--line); padding: 12px 16px 16px; }
+.word-zh { font-family: var(--font-kai); font-size: 16px; }
+.word-sentence { font-family: var(--font-latin); font-size: 14.5px; color: var(--teal-dark); margin-top: 6px; }
+
+.match-art {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  vertical-align: -6px;
+  margin-right: 6px;
+}
+
+.stu-sentences {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+.stu-sentences li {
+  font-family: var(--font-latin);
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--ink);
+  padding-left: 16px;
+  position: relative;
+}
+.stu-sentences li::before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 12px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #9dc8b6;
+}
+
+@media (max-width: 900px) {
+  html.app .page-head .stu-head-art { display: none; }
+}
+@media (max-width: 650px) {
+  .stu-week { grid-template-columns: 52px minmax(0, 1fr) 76px; }
+  .word-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+}
+
+/* 移动端顶部导航：横向滚动 + 右缘渐隐，避免最后一项被"切一半" */
+@media (max-width: 650px) {
+  html.app .side-nav {
+    gap: 14px;
+    padding-right: 28px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    mask-image: linear-gradient(90deg, #000 0, #000 90%, transparent 100%);
+    -webkit-mask-image: linear-gradient(90deg, #000 0, #000 90%, transparent 100%);
+  }
+  html.app .side-nav::-webkit-scrollbar { display: none; }
+  html.app .side-nav a { font-size: 14.5px; }
+  html.app .side-nav a .ico-svg { width: 17px; height: 17px; }
+}
+
+/* 渲染期替换 emoji 后使用的内联图形 */
+.inline-word-art {
+  width: 1.15em;
+  height: 1.15em;
+  border-radius: 50%;
+  object-fit: cover;
+  vertical-align: -0.22em;
+  margin-right: .18em;
+}
+.ico-inline {
+  width: 1.05em;
+  height: 1.05em;
+  vertical-align: -0.16em;
+}

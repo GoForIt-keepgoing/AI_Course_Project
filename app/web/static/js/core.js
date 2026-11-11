@@ -107,7 +107,7 @@ function pageHead(title, sub, actions) {
 function banner(text, kind, icon) {
   return '<div class="banner ' + (kind || 'info') + '"><span class="icon">' + (icon || '·') + '</span><div>' + text + '</div></div>';
 }
-function empty(text) { return '<div class="card" style="text-align:center;color:#5b6b73;padding:34px">' + esc(text) + '</div>'; }
+function empty(text) { return '<div class="card ui-empty"><img src="/static/illustrations/animals.webp" width="1200" height="800" alt="" aria-hidden="true" loading="lazy"><p>' + esc(text) + '</p></div>'; }
 
 /* ---------------------------------------------------------------- 外壳 */
 function roleLabel(role) {
@@ -127,7 +127,7 @@ function pageMeta() {
   if (first === 'guide') return { title: '帮助', sub: '使用指南与培训' };
   if (role === 'teacher') return { title: '工作台', sub: (S.user.class_name || '') + ' · 全部课例' };
   if (role === 'student') {
-    var stuSub = { '': '学习概览', tasks: '我的任务', wrong: '错题本', records: '订正记录', guide: '使用说明', task: '作业作答' };
+    var stuSub = { '': '学习概览', tasks: '我的任务', wrong: '错题本', records: '订正记录', report: '学习报告', words: '单词卡', guide: '使用说明', task: '作业作答' };
     return { title: '学习', sub: stuSub[segs[1] || ''] || '学习档案' };
   }
   return { title: '孩子', sub: '只读查看任务与已确认反馈' };
@@ -144,6 +144,7 @@ var ICON_PATHS = {
   rotate: '<path d="M4.2 10a5.8 5.8 0 0 1 9.9-4.1L16 8"/><path d="M16 3.6V8h-4.4"/><path d="M15.8 10a5.8 5.8 0 0 1-9.9 4.1L4 12"/><path d="M4 16.4V12h4.4"/>',
   parent: '<circle cx="10" cy="7" r="3.2"/><path d="M4.4 17c.6-3 2.8-4.6 5.6-4.6s5 1.6 5.6 4.6"/>',
   chart: '<path d="M3.5 16.5h13"/><rect x="5" y="10" width="2.6" height="6" rx=".6"/><rect x="9.2" y="6.2" width="2.6" height="9.8" rx=".6"/><rect x="13.4" y="8.4" width="2.6" height="7.6" rx=".6"/>',
+  cards: '<rect x="3" y="5.2" width="8.6" height="11" rx="1.4"/><path d="m13.4 6.4 2.9.9-2.2 8.4-2.8-.8"/>',
   calendar: '<rect x="3.5" y="4.5" width="13" height="12" rx="1.6"/><path d="M3.5 8.2h13M7 3v3M13 3v3"/>',
   message: '<path d="M4 5.5A1.5 1.5 0 0 1 5.5 4h9A1.5 1.5 0 0 1 16 5.5v6A1.5 1.5 0 0 1 14.5 13H9l-4 3.5V13H5.5A1.5 1.5 0 0 1 4 11.5Z"/>'
 };
@@ -170,9 +171,11 @@ function shellNav() {
     items.push(['group', '学习']);
     items.push(['#/student', 'compass', '学习概览', sub === '']);
     items.push(['#/student/tasks', 'task', '我的任务', sub === 'tasks' || sub === 'task']);
+    items.push(['#/student/words', 'cards', '单词卡', sub === 'words']);
     items.push(['group', '记录']);
     items.push(['#/student/wrong', 'wrong', '错题本', sub === 'wrong']);
     items.push(['#/student/records', 'rotate', '订正记录', sub === 'records']);
+    items.push(['#/student/report', 'chart', '学习报告', sub === 'report']);
     items.push(['group', '帮助']);
     items.push(['#/student/guide', 'book', '使用说明', sub === 'guide']);
   } else {
@@ -181,7 +184,7 @@ function shellNav() {
   }
   return items.map(function (it) {
     if (it[0] === 'group') return '<div class="side-group">' + esc(it[1]) + '</div>';
-    return '<a href="' + it[0] + '" class="' + (it[3] ? 'active' : '') + '"><span class="ico">' + icon(it[1]) + '</span>' + esc(it[2]) + '</a>';
+    return '<a href="' + it[0] + '" class="' + (it[3] ? 'active' : '') + '"' + (it[3] ? ' aria-current="page"' : '') + '><span class="ico">' + icon(it[1]) + '</span>' + esc(it[2]) + '</a>';
   }).join('');
 }
 
@@ -193,7 +196,8 @@ function shell(content) {
       : '只读 · 仅本人孩子';
   return '<div class="shell"><aside class="side">' +
       '<a class="side-brand" href="#/"><span class="logo">AI4En</span><span class="sub">英语教学助手</span></a>' +
-      '<nav class="side-nav">' + shellNav() + '</nav>' +
+      '<nav class="side-nav" aria-label="主要导航">' + shellNav() + '</nav>' +
+      '<details class="mobile-menu"><summary aria-label="展开或收起页面导航"><svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 5h14M3 10h14M3 15h14"/></svg><span>菜单</span></summary><nav class="mobile-nav" aria-label="移动端页面导航">' + shellNav() + '</nav></details>' +
       '<div class="side-foot">' + esc(foot) + '</div></aside>' +
       '<div class="main"><header class="topbar">' +
         '<div class="top-title"><div class="t">' + esc(meta.title) + '</div><p>' + esc(meta.sub) + '</p></div>' +
@@ -204,18 +208,55 @@ function shell(content) {
 }
 
 function modal(html) {
-  var mask = document.createElement('div');
-  mask.className = 'modal-mask';
+  closeModal();
+  var trigger = document.activeElement;
+  var mask = document.createElement('dialog');
+  mask.className = 'app-dialog';
   mask.id = 'modal';
-  mask.innerHTML = html;
-  mask.addEventListener('click', function (e) { if (e.target === mask) closeModal(); });
+  mask.setAttribute('aria-labelledby', 'modal-title');
+  mask.innerHTML = '<div class="modal"><button type="button" class="dialog-close-btn" data-act="close-modal" aria-label="关闭窗口">×</button>' + html + '</div>';
+  var heading = mask.querySelector('h3');
+  if (heading) heading.id = 'modal-title';
+  mask.querySelectorAll('.field').forEach(function (field, i) {
+    var label = field.querySelector('label');
+    var input = field.querySelector('input, textarea, select');
+    if (label && input) { input.id = input.id || 'modal-field-' + i; label.htmlFor = input.id; }
+  });
+  mask._returnFocus = trigger;
+  mask._previousOverflow = document.body.style.overflow;
+  mask.addEventListener('click', function (e) {
+    var r = mask.getBoundingClientRect();
+    if (e.target === mask && (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom)) closeModal();
+  });
+  mask.addEventListener('cancel', function (e) { e.preventDefault(); closeModal(); });
   document.body.appendChild(mask);
+  document.body.style.overflow = 'hidden';
+  mask.showModal();
+  var first = mask.querySelector('input, textarea, select');
+  if (first) first.focus();
   return mask;
 }
 function closeModal() {
   var el = document.getElementById('modal');
-  if (el) el.remove();
+  if (el) {
+    if (el.close) el.close();
+    el.remove();
+    document.body.style.overflow = el._previousOverflow || '';
+    if (el._returnFocus && el._returnFocus.isConnected) el._returnFocus.focus();
+  }
 }
+
+/* Native disclosure menu keeps navigation reachable without horizontal scrolling. */
+document.addEventListener('click', function (event) {
+  var menu = document.querySelector('.mobile-menu[open]');
+  if (!menu) return;
+  if (event.target.closest('.mobile-nav a') || !menu.contains(event.target)) menu.open = false;
+});
+document.addEventListener('keydown', function (event) {
+  if (event.key !== 'Escape') return;
+  var menu = document.querySelector('.mobile-menu[open]');
+  if (menu) { menu.open = false; menu.querySelector('summary').focus(); }
+});
 
 /* ---------------------------------------------------------------- 视图调度 */
 async function render() {
@@ -326,6 +367,11 @@ document.addEventListener('click', function (e) {
 });
 
 document.addEventListener('submit', function (e) {
+  if (e.target.id === 'newLesson') {
+    e.preventDefault();
+    Promise.resolve(ACTIONS['create-lesson'](q('[data-act="create-lesson"]', document.getElementById('modal')))).catch(fail);
+    return;
+  }
   if (e.target.id === 'loginForm') {
     e.preventDefault();
     Promise.resolve(doLogin()).catch(fail);
@@ -344,6 +390,10 @@ function bindState(name) {
 }
 
 document.addEventListener('input', function (e) {
+  if (e.target.closest('#newLesson')) {
+    var error = document.getElementById('newLessonError');
+    if (error) error.hidden = true;
+  }
   var node = e.target.closest('[data-bind]');
   if (!node) return;
   var state = bindState(node.getAttribute('data-state'));

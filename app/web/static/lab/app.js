@@ -970,7 +970,7 @@ function initM6(root) {
     const data = games.memory;
     const deck = [];
     data.forEach((p, i) => {
-      deck.push({ pair: i, face: p.emoji });
+      deck.push({ pair: i, face: p.cn || p.en });
       deck.push({ pair: i, face: p.en });
     });
     const shuffled = shuffle(deck);

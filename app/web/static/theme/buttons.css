@@ -1,7 +1,7 @@
 /* ==========================================================================
    AI4En · 按钮（正式版）
-   应用界面按 app-screens 规则降噪：实色填充、发丝描边、无渐变、无光晕。
-   位移/按压缩放/涟漪由 motion.css 负责，这里只管颜色与描边。
+   平面化降噪：发丝描边、无光晕；主操作保留一处克制的渐变与扫光，
+   其余按钮仍为实色。位移/按压缩放/涟漪由 motion.css 负责。
    ========================================================================== */
 
 html :is(.btn, .button) {
@@ -24,14 +24,36 @@ html.app .btn:hover {
 }
 
 html.app .btn.primary {
-  background: #2f5c51;
-  border-color: #2f5c51;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: var(--grad-primary);
+  border-color: transparent;
   color: #ffffff;
 }
 
 html.app .btn.primary:hover {
-  background: #35695c;
-  border-color: #35695c;
+  background: var(--grad-primary-hover);
+  border-color: transparent;
+}
+
+/* 扫光只在主按钮上，hover 时从左掠到右；触屏与减弱动效时不出现 */
+html.app .btn.primary::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(100deg, transparent 25%, rgba(255, 255, 255, .26) 50%, transparent 75%);
+  transform: translateX(-130%);
+  transition: transform .6s cubic-bezier(.22, .75, .2, 1);
+}
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  html.app .btn.primary:hover::after { transform: translateX(130%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.app .btn.primary::after { display: none; }
 }
 
 html.app .btn.ghost {
@@ -118,14 +140,14 @@ html.classroom nav a[aria-current] {
 
 /* 工作坊 */
 html.workshop .btn {
-  background: #2f5c51;
-  border: 1px solid #2f5c51;
+  background: var(--grad-primary);
+  border: 1px solid transparent;
   color: #fff;
   box-shadow: none;
   transition: background-color .16s ease, border-color .16s ease;
 }
 
-html.workshop .btn:hover { background: #35695c; border-color: #35695c; filter: none; }
+html.workshop .btn:hover { background: var(--grad-primary-hover); border-color: transparent; filter: none; }
 
 html.workshop .btn.secondary {
   background: transparent;
@@ -158,12 +180,12 @@ html.lab .btn {
 html.lab .btn:hover:not(:disabled) { background: #f3f6f0; border-color: #c8d4c8; }
 
 html.lab .btn.primary {
-  background: #2f5c51;
-  border-color: #2f5c51;
+  background: var(--grad-primary);
+  border-color: transparent;
   color: #fff;
 }
 
-html.lab .btn.primary:hover:not(:disabled) { background: #35695c; filter: none; }
+html.lab .btn.primary:hover:not(:disabled) { background: var(--grad-primary-hover); filter: none; }
 
 /* 答辩页 */
 html.defense .button.accent {
@@ -188,6 +210,10 @@ html.defense .button.outline:hover {
 }
 
 /* 焦点与禁用 */
+html.app .btn, html.workshop .btn, html.lab .btn, html.defense .button, html.classroom .tools button {
+  transition: translate .16s var(--motion-ease), scale .16s var(--motion-ease), background-color .16s ease, border-color .16s ease, color .16s ease;
+}
+html.app .btn.primary:is(:disabled, [aria-disabled="true"])::after { display: none; }
 html :is(.btn, .button):focus-visible {
   outline: 2px solid #2f5c51;
   outline-offset: 2px;

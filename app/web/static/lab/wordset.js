@@ -87,7 +87,7 @@
     return {
       sentences: sentences,
       pairs: words.map(function (w) { return { en: w.en, cn: w.zh }; }),
-      memory: words.map(function (w) { return { emoji: emojiFor(w.en) || '🔤', en: w.en }; }),
+      memory: words.map(function (w) { return { cn: w.zh || w.en, en: w.en }; }),
       whack: {
         targets: words.map(function (w) { return { cn: w.zh, en: w.en }; }),
         pool: words.map(function (w) { return w.en; })

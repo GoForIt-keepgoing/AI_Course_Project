@@ -1,4 +1,16 @@
 /* Shared picture-book accents: local assets, reserved dimensions, no overlays on controls. */
+.stu-page-guide { display: flex; justify-content: space-between; align-items: center; gap: 24px; padding: 20px 24px; margin-bottom: 24px; border: 1px solid #e2e8df; border-radius: 14px; background: linear-gradient(115deg, #edf4ed, #faf6ed); }
+.stu-page-guide h2 { font-size: 20px; margin: 6px 0 12px; line-height: 1.5; }
+.stu-page-guide ol { display: flex; flex-wrap: wrap; gap: 8px 28px; padding-left: 20px; color: #466258; font-size: 14px; }
+.stu-page-guide img { width: 160px; height: 108px; object-fit: contain; flex-shrink: 0; }
+.stu-practice-toolbar { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 16px; }
+.stu-practice-toolbar p { margin-top: 6px; }
+.stu-word-practice { min-width: 0; }
+.stu-word-controls { padding: 12px; border: 1px solid #e2e8df; border-top: 0; border-radius: 0 0 12px 12px; background: white; }
+.stu-word-controls .row { margin-top: 8px; }
+.stu-word-controls [aria-pressed="true"] { background: #e4efe5; border-color: #7ca58d; }
+@media (max-width: 650px) { .stu-page-guide { gap: 12px; padding: 16px; } .stu-page-guide img { width: 88px; height: 76px; } .stu-page-guide ol { display: grid; gap: 8px; } .stu-page-guide h2 { font-size: 18px; } }
+@media print { .stu-page-guide img, .stu-word-controls { display: none; } }
 .scene-art { display: block; object-fit: contain; height: auto; max-width: 100%; pointer-events: none; user-select: none; }
 .heading-art { width: 146px; height: 98px; flex: 0 0 146px; order: 1; }
 html.app .page-head { align-items: center; }

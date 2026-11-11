@@ -42,7 +42,7 @@ function exEditorCard(item, i) {
   var inner = '';
   if (type === 'choice') {
     var options = item.options || ['', '', '', ''];
-    inner = '<div class="grid" style="grid-template-columns:repeat(2,minmax(0,1fr))">' + options.map(function (opt, j) {
+    inner = '<div class="grid option-edit-grid">' + options.map(function (opt, j) {
       var letter = String.fromCharCode(65 + j);
       return '<div class="ex-opt"><span class="opt-key">' + letter + '</span>' +
         '<input class="input" data-state="ex" data-bind="items.' + i + '.options.' + j + '" value="' + esc(opt) + '">' +
@@ -63,7 +63,7 @@ function exEditorCard(item, i) {
       '<div class="field"><label>句架（有句架支持）</label><input class="input" data-state="ex" data-bind="items.' + i + '.frame" value="' + esc(item.frame || '') + '"></div>' +
       '<div class="field"><label>关键词（给关键词支持）</label><input class="input" data-state="ex" data-bind="items.' + i + '.keywords" value="' + esc(item.keywords || '') + '"></div></div>';
   }
-  return '<div class="card"><div class="row" style="justify-content:space-between;margin-bottom:12px">' +
+  return '<div class="card ex-editor"><div class="row question-toolbar" style="justify-content:space-between;margin-bottom:12px">' +
     '<div class="row"><span class="q-no">' + (i + 1) + '</span>' +
     '<select class="select" style="width:120px" data-act="ex-type" data-i="' + i + '">' +
     ['choice', 'fill', 'short'].map(function (t) {

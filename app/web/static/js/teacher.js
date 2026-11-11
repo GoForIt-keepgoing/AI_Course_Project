@@ -22,21 +22,21 @@ function teacherHomeView(lessons) {
   return pageHead('教师工作台', esc(S.user.name) + ' · ' + esc(S.user.class_name || '') + ' · 共 ' + lessons.length + ' 个课例',
       btn('新建课例', 'new-lesson', '', 'primary')) +
     '<div class="card" style="margin-bottom:20px"><div class="row" style="justify-content:space-between;align-items:center;gap:14px">' +
-      '<div><div class="section-title" style="margin:0"><span class="dot"></span>拓展工具 <span class="tiny muted">（在左侧栏“拓展”里）</span></div>' +
-      '<div class="tiny muted" style="margin-top:4px">游戏工坊、水果线索卡、游戏闯关、数字人、思维导图都在工作台内打开，左侧栏与顶栏不变；本课例自己的配对与排序仍在“课堂活动”。</div></div>' +
+      '<div><div class="section-title" style="margin:0">课堂工具</div>' +
+      '<div class="tiny muted" style="margin-top:4px">准备游戏、词卡和口语活动。</div></div>' +
       '<div class="row" style="flex-wrap:wrap;justify-content:flex-end">' +
       '<a class="btn sm primary" href="#/studio/games">游戏闯关 →</a>' +
       '<a class="btn sm" href="#/studio/mystery">水果线索卡 →</a>' +
       '<a class="btn sm" href="#/studio">全部拓展 →</a>' +
       (classroomLesson ? '<a class="btn sm" href="#/lesson/' + classroomLesson.id + '/activities">本课课堂活动</a>' : '') +
       '</div></div></div>' +
-    '<div class="grid two" style="margin-bottom:20px">' +
+    '<details class="workspace-notes"><summary>教学流程与使用提示</summary><div class="grid two">' +
       '<div class="card"><div class="section-title"><span class="dot"></span>本课例要解决的问题</div>' +
       '<p class="small muted" style="line-height:1.85">围绕同一份课例（三年级 Animals），把备课、课件、课堂活动、练习与作业反馈连成一条链路：' +
       '教师修改并审核内容，学生只看到已发布的任务，家长只看到自己孩子已确认的反馈。</p></div>' +
       '<div class="card"><div class="section-title"><span class="dot"></span>演示路径（约 8 分钟）</div>' +
       '<p class="small muted" style="line-height:1.85">打开课例 → 改一处活动时间 → 开课件 → 玩一轮配对 → 发布任务 → 学生提交 → 确认反馈 → 学生订正 → 看统计与日志。</p></div>' +
-    '</div>' +
+    '</div></details>' +
     '<div class="section-title" style="margin:6px 0 12px"><span class="dot"></span>我的课例</div>' +
     '<div class="grid two">' + (cards || empty('还没有课例，点右上角“新建课例”。')) + '</div>';
 }
@@ -221,31 +221,41 @@ ACTIONS['plan-jump'] = function (el) {
 };
 
 function newLessonModal() {
-  modal('<h3>新建课例</h3><div class="modal-sub">填写教学条件，生成后可以继续修改；所有内容围绕同一份课例展开。</div>' +
+  modal('<h3>新建课例</h3><div class="modal-sub">设置这节课的主题与目标。创建后可继续编辑。</div>' +
     '<form id="newLesson" class="form-grid">' +
-    '<div class="field"><label>课例标题 *</label><input class="input" name="title" placeholder="例如 Animals: What\'s this?" value=""></div>' +
+    '<div class="field"><label>课例标题 <span class="required-mark">*</span></label><input class="input" name="title" required placeholder="例如 Animals: What\'s this?" value=""></div>' +
     '<div class="form-grid cols-2">' +
-    '<div class="field"><label>年级 *</label><input class="input" name="grade" value="小学三年级"></div>' +
-    '<div class="field"><label>主题 *</label><input class="input" name="topic" placeholder="例如 Animals"></div></div>' +
-    '<div class="field"><label>目标词汇 *（逗号分隔，至少 2 个）</label><input class="input" name="vocab" placeholder="cat, dog, panda, frog"></div>' +
-    '<div class="field"><label>目标句型 *（每行一句）</label><textarea class="textarea" rows="2" name="sentences">What\'s this?\nIt\'s a cat.</textarea></div>' +
-    '<div class="form-grid cols-2">' +
-    '<div class="field"><label>课时（分钟）</label><input class="input" name="duration" value="40"></div>' +
-    '<div class="field"><label>教学备注</label><input class="input" name="notes" placeholder="教材进度、已有基础、设备"></div></div>' +
-    '</form><div class="modal-foot">' + btn('取消', 'close-modal') + btn('创建并备课', 'create-lesson', '', 'primary') + '</div>');
+    '<div class="field"><label>年级 *</label><input class="input" name="grade" required value="小学三年级"></div>' +
+    '<div class="field"><label>主题 *</label><input class="input" name="topic" required placeholder="例如 Animals"></div></div>' +
+    '<div class="field"><label>目标词汇 *</label><input class="input" name="vocab" required placeholder="cat, dog, panda, frog"><div class="hint">用逗号分隔，至少填写 2 个词。</div></div>' +
+    '<div class="field"><label>目标句型 *</label><textarea class="textarea" rows="2" name="sentences" required>What\'s this?\nIt\'s a cat.</textarea><div class="hint">每行填写一个句型。</div></div>' +
+    '<div class="field"><label>课时（分钟）</label><input class="input" type="number" min="1" name="duration" value="40"></div>' +
+    '<details class="modal-options"><summary>补充教学备注 <span>选填</span></summary><div class="field"><label>教材进度、已有基础与设备</label><textarea class="textarea" rows="2" name="notes" placeholder="例如：学生已学过颜色词，教室可投屏。"></textarea></div></details>' +
+    '</form><p class="form-error" id="newLessonError" role="alert" hidden></p><div class="modal-foot">' + btn('取消', 'close-modal') + btn('创建并备课', 'create-lesson', 'type="submit" form="newLesson"', 'primary') + '</div>');
 }
 
 ACTIONS['new-lesson'] = function () { newLessonModal(); };
 ACTIONS['close-modal'] = function () { closeModal(); };
 
-ACTIONS['create-lesson'] = async function () {
+ACTIONS['create-lesson'] = async function (button) {
   var form = q('#newLesson');
+  if (!form.reportValidity()) return;
+  var fields = new FormData(form);
   var body = {
-    title: form.title.value, grade: form.grade.value, topic: form.topic.value,
-    vocab: form.vocab.value, sentences: form.sentences.value,
-    duration: form.duration.value, notes: form.notes.value
+    title: fields.get('title'), grade: fields.get('grade'), topic: fields.get('topic'),
+    vocab: fields.get('vocab'), sentences: fields.get('sentences'),
+    duration: fields.get('duration'), notes: fields.get('notes')
   };
-  var res = await api('/api/lessons', 'POST', body);
+  var error = q('#newLessonError');
+  if (body.vocab.split(/[,，、]/).filter(function (w) { return w.trim(); }).length < 2) {
+    error.textContent = '请填写至少 2 个目标词汇，并用逗号分隔。'; error.hidden = false; return;
+  }
+  if (button.disabled) return;
+  button.disabled = true; button.textContent = '正在创建…'; error.hidden = true;
+  var res;
+  try { res = await api('/api/lessons', 'POST', body); }
+  catch (err) { error.textContent = err.message; error.hidden = false; return; }
+  finally { button.disabled = false; button.textContent = '创建并备课'; }
   closeModal();
   toast('课例已创建，可以生成教案草稿', 'ok');
   S.lessonId = null;

@@ -256,8 +256,12 @@ window.JumpGame = (function () {
   function drawFruit(ctx, f) {
     ctx.save();
     ctx.textAlign = "center"; ctx.textBaseline = "middle";
-    ctx.font = "30px serif";
-    ctx.fillText(f.emoji, f.x, f.y);
+    /* 用首字母圆牌代替 emoji 图案 */
+    ctx.fillStyle = "#fff3dc";
+    ctx.beginPath(); ctx.arc(f.x, f.y - 4, 16, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = "#8a5a2b";
+    ctx.font = "bold 16px Georgia, serif";
+    ctx.fillText(String(f.en || "?").charAt(0).toUpperCase(), f.x, f.y - 4);
     ctx.font = "12px 'Microsoft YaHei'";
     const label = f.en;
     const tw = ctx.measureText(label).width;

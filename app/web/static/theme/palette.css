@@ -13,7 +13,6 @@
   --grad-primary-hover: linear-gradient(135deg, #6aa392 0%, #4b8473 52%, #35645a 100%);
   --grad-hero: linear-gradient(150deg, #14352f 0%, #235044 44%, #3f7a68 76%, #5e9584 100%);
   --grad-card: linear-gradient(160deg, #ffffff 0%, #fdfefb 55%, #f6faf5 100%);
-  --grad-sand: linear-gradient(135deg, #faf4ea 0%, #f0e5d4 100%);
   --grad-page:
     radial-gradient(1080px 620px at 2% -12%, rgba(214, 232, 221, .9) 0%, rgba(214, 232, 221, 0) 56%),
     radial-gradient(900px 540px at 104% -8%, rgba(246, 231, 209, .62) 0%, rgba(246, 231, 209, 0) 50%),
@@ -49,19 +48,11 @@ html.app {
 
   --radius: 12px;
   --shadow: 0 1px 2px rgba(27, 43, 40, .04);
-
-  --grad-primary: linear-gradient(135deg, #5f9887 0%, #447a6b 52%, #2f5c51 100%);
-  --grad-primary-hover: linear-gradient(135deg, #6aa392 0%, #4b8473 52%, #35645a 100%);
-  --grad-hero: linear-gradient(150deg, #14352f 0%, #235044 44%, #3f7a68 76%, #5e9584 100%);
-  --grad-card: linear-gradient(160deg, #ffffff 0%, #fdfefb 55%, #f6faf5 100%);
-  --grad-page:
-    radial-gradient(1080px 620px at 2% -12%, rgba(214, 232, 221, .9) 0%, rgba(214, 232, 221, 0) 56%),
-    radial-gradient(900px 540px at 104% -8%, rgba(246, 231, 209, .62) 0%, rgba(246, 231, 209, 0) 50%),
-    linear-gradient(116deg, #eef4ee 0%, #f8f8f2 48%, #f4efe6 100%);
 }
 
 html.app body {
-  background: var(--bg);
+  background: var(--grad-page);
+  background-attachment: fixed;
   color: var(--ink);
   font-size: 16px;
   line-height: 1.65;
@@ -75,6 +66,16 @@ html.app *::-webkit-scrollbar-thumb { background: #cfdcd3; border-radius: 99px; 
 html.app *::-webkit-scrollbar-thumb:hover { background: #b6c9bd; background-clip: content-box; }
 
 html.app a { color: var(--teal-dark); }
+
+/* 卡片：极淡的冷暖过渡，比纯白更有纸感；统计数字用等宽数字对齐 */
+html.app .card,
+html.app .stat,
+html.app .lesson-card { background: var(--grad-card); }
+
+html.app .stat .num,
+html.app .card .num,
+html.app table td,
+html.app table th { font-variant-numeric: tabular-nums; }
 
 /* 外壳 */
 html.app .side {
@@ -159,13 +160,15 @@ html.app .banner.error { background: #fbf0ee; border-color: #eed3cf; color: var(
 
 /* 登录 */
 html.app .login-left {
-  background: #173a33;
+  background: var(--grad-hero);
   isolation: isolate;
 }
 html.app .login-left::before {
   content: "";
   position: absolute; inset: 0;
-  background: linear-gradient(180deg, rgba(255, 255, 255, .04), transparent 46%);
+  background:
+    radial-gradient(620px 420px at 14% 4%, rgba(255, 255, 255, .12), transparent 62%),
+    linear-gradient(180deg, rgba(255, 255, 255, .05), transparent 46%);
   z-index: -1;
 }
 html.app .login-left::after {
@@ -317,9 +320,6 @@ html.lab .hero {
 html.lab .hero::after { background: radial-gradient(circle, rgba(255, 255, 255, .22), transparent 66%); }
 html.lab .hero p { color: rgba(233, 244, 239, .86); }
 
-html.lab .btn.primary { background: var(--grad-primary); border-color: transparent; }
-html.lab .btn.primary:hover { background: var(--grad-primary-hover); }
-
 html.lab .nav-item.active {
   background: linear-gradient(135deg, rgba(95, 152, 135, .34), rgba(75, 132, 115, .22));
   border-color: rgba(131, 168, 151, .42);
@@ -381,7 +381,7 @@ html.workshop .brand-mark { background: var(--grad-primary); }
   --font-sans: "Microsoft YaHei UI", "Microsoft YaHei", "PingFang SC", "Noto Sans SC", system-ui, sans-serif;
   --font-serif: Georgia, "Noto Serif SC", "华文中宋", "Source Han Serif SC", "Songti SC", SimSun, serif;
   --font-kai: Georgia, "KaiTi", "楷体", "华文楷体", "Kaiti SC", "Noto Serif SC", serif;
-  --font-brush: "STXingkai", "华文行楷", "KaiTi", "楷体", serif;
+  --font-brush: "STXingkai", "华文行楷", "KaiTi", "楷体", "Kaiti SC", "Songti SC", serif;
   --font-latin: Georgia, "Times New Roman", "Noto Serif SC", serif;
 }
 

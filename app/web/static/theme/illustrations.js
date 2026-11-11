@@ -3,13 +3,14 @@
   'use strict';
   function artwork(key, className) {
     var img = document.createElement('img');
-    img.src = '/static/illustrations/' + key + '.png';
+    img.src = '/static/illustrations/' + key + '.webp';
     img.alt = '';
     img.setAttribute('aria-hidden', 'true');
     img.className = 'scene-art ' + (className || '');
-    img.width = 1536;
-    img.height = 1024;
+    img.width = 1200;
+    img.height = 800;
     img.decoding = 'async';
+    img.loading = 'lazy';
     img.draggable = false;
     return img;
   }
@@ -24,23 +25,31 @@
       if (login && !login.querySelector('.scene-art')) {
         login.insertBefore(artwork('teaching', 'login-art'), login.querySelector('.foot'));
       }
-      var state = window.S || {};
-      var route = state.route || [];
-      var key = state.user && state.user.role !== 'teacher' ? 'learning' : 'teaching';
-      if (route[0] === 'review' || /exercises|tasks|results/.test(route[2] || '')) key = 'learning';
-      if (route[2] === 'activities' || route[0] === 'studio') key = 'animals';
-      /* 工作区页头不放装饰插画：标题与动作需要干净的横向空间 */
+      var state = window.S || {}, route = state.route || [];
+      var key = 'atelier';
+      if (state.user && state.user.role === 'parent') key = 'garden';
+      if (state.user && state.user.role === 'student') key = /tasks|task/.test(route[1] || '') ? 'atelier' : /words|guide/.test(route[1] || '') ? 'library' : 'garden';
+      if (route[0] === 'guide' || route[0] === 'studio' || /slides|tasks/.test(route[2] || '')) key = 'library';
+      if (route[0] === 'review' || route[2] === 'results') key = 'garden';
+      if (route[2] === 'activities') key = 'animals';
+      document.querySelectorAll('.page-head').forEach(function (head) {
+        head.classList.add('journal-heading');
+        head.dataset.scene = key;
+        if (!head.querySelector('.journal-art')) head.appendChild(artwork(key, 'journal-art'));
+      });
     }
     if (root.classList.contains('classroom')) add(document.querySelector('.intro'), 'animals', 'classroom-art');
     if (root.classList.contains('workshop')) {
-      add(document.querySelector('.hero-copy'), 'teaching', 'workshop-art');
+      add(document.querySelector('.hero-copy'), 'library', 'workshop-art');
       document.querySelectorAll('.page-heading').forEach(function (head) {
-        add(head, /studio|lesson/.test(location.hash) ? 'animals' : 'teaching', 'heading-art');
+        add(head, /studio|lesson/.test(location.hash) ? 'atelier' : 'library', 'heading-art');
       });
     }
     if (root.classList.contains('lab')) {
       add(document.querySelector('.topbar'), 'teaching', 'heading-art');
-      add(document.querySelector('#view > .hero'), 'teaching', 'lab-art');
+      add(document.querySelector('#view > .hero'), 'atelier', 'lab-art');
+      var labHead = document.querySelector('.topbar');
+      if (labHead) { var art = labHead.querySelector('.scene-art'); if (art) art.src = '/static/illustrations/library.webp'; }
     }
     if (root.classList.contains('defense')) {
       var board = document.querySelector('.cover-grid .word-board');

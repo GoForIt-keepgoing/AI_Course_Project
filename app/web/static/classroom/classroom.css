@@ -42,3 +42,15 @@ footer { padding: .7rem 0; }
   .brand span { display: none; }
   iframe { height: 610px; }
 }
+.word-tiles .word-tile-art {
+  display: block;
+  width: clamp(36px, 5vw, 50px);
+  height: auto;
+  aspect-ratio: 1;
+  box-sizing: border-box;
+  padding: 6px;
+  border-radius: 50%;
+  background: #f6f2e7;
+  object-fit: contain;
+  margin: 0 auto .2rem;
+}

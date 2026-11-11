@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import re
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from . import auth, content, db, guide
 
@@ -1177,7 +1177,8 @@ def api_student_overview(ctx):
     """
     user = need_role(ctx, "student")
     tasks = db.query(
-        """SELECT t.*, l.title AS lesson_title FROM tasks t JOIN lessons l ON l.id = t.lesson_id
+        """SELECT t.*, l.title AS lesson_title, l.vocab AS lesson_vocab, l.sentences AS lesson_sentences
+           FROM tasks t JOIN lessons l ON l.id = t.lesson_id
            WHERE t.class_id = ? AND t.status != 'draft' ORDER BY t.id DESC""",
         (user["class_id"],))
     subs = {}
@@ -1186,6 +1187,7 @@ def api_student_overview(ctx):
 
     wrong, feedbacks, revisions_out, timeline = [], [], [], []
     tags = {}
+    weeks = {}
     correct_total = graded_total = 0
     pending_revision = revised = 0
     next_task = None
@@ -1209,6 +1211,14 @@ def api_student_overview(ctx):
 
         answers = db.loads(sub["answers"], {})
         grading = db.loads(sub["grading"], {})
+        try:
+            day = datetime.strptime(str(sub["submitted_at"])[:10], "%Y-%m-%d").date()
+        except ValueError:
+            day = None
+        if day:
+            monday = day - timedelta(days=day.weekday())
+            bucket = weeks.setdefault(monday, {"start": monday, "submitted": 0, "total": 0, "correct": 0})
+            bucket["submitted"] += 1
         fbs = {f["item_id"]: f for f in db.query(
             "SELECT * FROM feedback WHERE submission_id = ?", (sub["id"],))}
         rev_rows = db.query("SELECT * FROM revisions WHERE submission_id = ? ORDER BY id", (sub["id"],))
@@ -1223,6 +1233,9 @@ def api_student_overview(ctx):
                     continue
                 graded_total += 1
                 correct_total += 1 if ok else 0
+                if day:
+                    weeks[monday]["total"] += 1
+                    weeks[monday]["correct"] += 1 if ok else 0
                 bucket = tags.setdefault(tag, {"tag": tag, "correct": 0, "total": 0})
                 bucket["total"] += 1
                 bucket["correct"] += 1 if ok else 0
@@ -1287,8 +1300,43 @@ def api_student_overview(ctx):
 
     assigned = len(tasks)
     submitted = len(subs)
+
+    # 词卡：按本班课例的目标词去重，供学生端「单词卡」使用；不含答案与解析。
+    vocab_words, seen_words = [], set()
+    for task in tasks:
+        for word in db.loads(task.get("lesson_vocab"), []) or []:
+            key = str(word).strip().lower()
+            if key and key not in seen_words:
+                seen_words.add(key)
+                vocab_words.append(str(word).strip())
+    vocab_cards = content.build_cards({"vocab": vocab_words})["word_cards"] if vocab_words else []
+
+    # 句型：同一课例的目标句型，供单词卡页做跟读提示。
+    sentence_list, seen_sentences = [], set()
+    for task in tasks:
+        for sentence in db.loads(task.get("lesson_sentences"), []) or []:
+            key = str(sentence).strip()
+            if key and key not in seen_sentences:
+                seen_sentences.add(key)
+                sentence_list.append(key)
+
+    # 最近 4 周：每周提交数与客观题正确率，供「学习报告」画趋势。
+    week_rows = []
+    for start in sorted(weeks)[-4:]:
+        item = weeks[start]
+        week_rows.append({
+            "start": start.isoformat(),
+            "label": start.strftime("%m/%d"),
+            "submitted": item["submitted"],
+            "correct": item["correct"],
+            "total": item["total"],
+            "accuracy": round(item["correct"] / item["total"] * 100, 0) if item["total"] else None,
+        })
+
+    cls = db.query_one("SELECT name FROM classes WHERE id = ?", (user.get("class_id"),)) if user.get("class_id") else None
+
     return 200, {
-        "student": {"name": user["name"], "class_name": ""},
+        "student": {"name": user["name"], "class_name": cls["name"] if cls else ""},
         "stats": {
             "assigned": assigned,
             "submitted": submitted,
@@ -1301,6 +1349,9 @@ def api_student_overview(ctx):
             "accuracy": round(correct_total / graded_total * 100, 0) if graded_total else None,
         },
         "tags": sorted(tags.values(), key=lambda t: (-t["total"], t["tag"])),
+        "vocab": vocab_cards,
+        "sentences": sentence_list,
+        "weeks": week_rows,
         "wrong": wrong,
         "feedback": sorted(feedbacks, key=lambda f: f["at"] or "", reverse=True)[:8],
         "revisions": sorted(revisions_out, key=lambda r: r["at"] or "", reverse=True),
