@@ -1,11 +1,11 @@
 /* ================= 设计系统 ================= */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
-  --bg: #f4f6fb; --surface: #ffffff; --ink: #1b2440; --muted: #6b7690;
-  --line: #e7ebf4; --primary: #4f8777; --primary-2: #35685a;
-  --cyan: #10b5e0; --green: #17b26a; --gold: #b08a54; --red: #ef4444;
-  --sidebar: #0e1633; --sidebar-2: #131d42;
-  --shadow: 0 8px 26px rgba(24,38,90,.07);
+  --bg: #f5f6f1; --surface: #ffffff; --ink: #1b2b28; --muted: #5c6f68;
+  --line: #e2e7df; --primary: #3f7a6a; --primary-2: #2f5c51;
+  --cyan: #3f7a6a; --green: #2f7a52; --gold: #b08a54; --red: #a8544e;
+  --sidebar: #17332e; --sidebar-2: #17332e;
+  --shadow: none;
 }
 html, body { height: 100%; }
 body {
@@ -22,15 +22,15 @@ button { font-family: inherit; }
 
 /* ---------- 侧边栏 ---------- */
 .sidebar {
-  width: 250px; flex: 0 0 250px; background: linear-gradient(180deg, var(--sidebar), var(--sidebar-2));
-  color: #c7d0ec; display: flex; flex-direction: column; padding: 20px 14px;
+  width: 250px; flex: 0 0 250px; background: var(--sidebar);
+  color: #c3d2ca; display: flex; flex-direction: column; padding: 20px 14px;
   position: sticky; top: 0; height: 100vh; overflow-y: auto;
 }
 .brand { display: flex; gap: 11px; align-items: center; padding: 4px 8px 18px; }
 .logo {
-  width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center;
-  font-weight: 800; font-size: 20px; color: #06122a;
-  background: linear-gradient(135deg, #7fe3ff, #a78bfa); box-shadow: 0 6px 16px rgba(124,92,255,.4);
+  width: 40px; height: 40px; border-radius: 10px; display: grid; place-items: center;
+  font-weight: 700; font-size: 19px; color: #fff;
+  background: #2f5c51; box-shadow: none;
 }
 .brand-name { font-size: 16px; font-weight: 700; color: #fff; }
 .brand-sub { font-size: 11px; color: #8b97c0; letter-spacing: .04em; }
@@ -41,7 +41,8 @@ button { font-family: inherit; }
   font-size: 13.5px; color: #b9c3e2; cursor: pointer; transition: .16s; border: 1px solid transparent;
 }
 .nav-item:hover { background: rgba(255,255,255,.06); color: #fff; }
-.nav-item.active { background: rgba(124,92,255,.24); color: #fff; border-color: rgba(124,92,255,.45); }
+.nav-item.active { background: rgba(255,255,255,.09); color: #fff; border-color: transparent; }
+.nav-ico { width: 16px; height: 16px; flex: 0 0 16px; opacity: .85; }
 .side-foot { margin-top: auto; padding: 16px 10px 4px; font-size: 11px; color: #6f7cab; }
 
 /* ---------- 主区 ---------- */
@@ -130,7 +131,7 @@ button { font-family: inherit; }
 .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
 @media (max-width: 900px) { .stats { grid-template-columns: repeat(2, 1fr); } }
 .stat { background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 16px; box-shadow: var(--shadow); }
-.stat-num { font-size: 24px; font-weight: 800; color: var(--primary); }
+.stat-num { font-size: 26px; font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; }
 .stat-lbl { font-size: 12px; color: var(--muted); margin-top: 2px; }
 
 /* ================= M1 备课 ================= */

@@ -25,30 +25,30 @@
 html.app {
   color-scheme: light;
 
-  --ink: #172a29;
-  --ink-2: #33504c;
-  --muted: #6b807a;
+  --ink: #1b2b28;
+  --ink-2: #3a4f49;
+  --muted: #5c6f68;
 
-  --bg: #f5f7f4;
+  --bg: #f5f6f1;
   --card: #ffffff;
-  --line: #e2e8e2;
-  --line-soft: #edf1ec;
+  --line: #e2e7df;
+  --line-soft: #eef1ea;
 
-  --teal: #4f8777;
+  --teal: #3f7a6a;
   --teal-dark: #2f5c51;
   --teal-deep: #1f423b;
-  --teal-soft: #e8f1ec;
-  --sage: #83a897;
+  --teal-soft: #eef2ea;
+  --sage: #8aa99a;
 
-  --amber: #a37a45;
-  --amber-soft: #f6efe3;
-  --gold: #c0a273;
+  --amber: #8a5f2c;
+  --amber-soft: #f7efe2;
+  --gold: #b99a6b;
 
   --danger: #a8544e;
-  --danger-soft: #faeceb;
+  --danger-soft: #fbf1ef;
 
-  --radius: 16px;
-  --shadow: 0 1px 2px rgba(23, 42, 41, .04), 0 16px 34px -28px rgba(23, 42, 41, .5);
+  --radius: 12px;
+  --shadow: 0 1px 2px rgba(27, 43, 40, .04);
 
   --grad-primary: linear-gradient(135deg, #5f9887 0%, #447a6b 52%, #2f5c51 100%);
   --grad-primary-hover: linear-gradient(135deg, #6aa392 0%, #4b8473 52%, #35645a 100%);
@@ -62,9 +62,9 @@ html.app {
 
 html.app body {
   background: var(--bg);
-  background-image: var(--grad-page);
-  background-attachment: fixed;
   color: var(--ink);
+  font-size: 16px;
+  line-height: 1.65;
 }
 
 html.app ::selection { background: #cfe3d7; color: #14302b; }
@@ -78,94 +78,54 @@ html.app a { color: var(--teal-dark); }
 
 /* 外壳 */
 html.app .side {
-  background: linear-gradient(176deg, #fbfdfa 0%, #f1f7f2 42%, #e4efe7 100%);
-  border-right: 1px solid rgba(206, 221, 211, .9);
-  box-shadow: inset -1px 0 0 rgba(255, 255, 255, .7), 18px 0 40px -46px rgba(23, 42, 41, .5);
-  backdrop-filter: blur(6px);
+  background: #fbfbf8;
+  border-right: 1px solid #e6eae2;
+  box-shadow: none;
 }
 
 html.app .side-brand .logo {
-  background: var(--grad-primary);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  letter-spacing: .015em;
+  color: var(--ink);
+  letter-spacing: .01em;
 }
 
-html.app .side-nav a { color: #3f574f; }
-html.app .side-nav a:hover {
-  background: linear-gradient(135deg, #eef5f0, #e6efe9);
-  color: var(--teal-dark);
-}
+html.app .side-nav a { color: #47594f; }
+html.app .side-nav a:hover { background: #eef1ea; color: #1b2b28; }
 html.app .side-nav a.active {
-  background: var(--grad-primary);
-  color: #fff;
-  box-shadow: 0 12px 24px -16px rgba(31, 66, 60, .95), inset 0 1px 0 rgba(255, 255, 255, .22);
+  background: #e8ede4;
+  color: #1b2b28;
+  box-shadow: none;
 }
 
 html.app .topbar {
-  background: linear-gradient(180deg, rgba(255, 255, 255, .96), rgba(252, 253, 250, .8));
-  border-bottom: 1px solid rgba(211, 224, 214, .85);
-  box-shadow: 0 1px 0 rgba(255, 255, 255, .9), 0 12px 28px -34px rgba(23, 42, 41, .55);
-  backdrop-filter: blur(16px) saturate(1.08);
+  background: #ffffff;
+  border-bottom: 1px solid #e8ece4;
+  box-shadow: none;
 }
 
 html.app .role-chip,
 html.app .chip.teal {
-  background: linear-gradient(135deg, #eaf3ee, #dfede5);
+  background: #eef2ea;
   color: var(--teal-dark);
 }
 html.app .chip.gray { background: #eef2ee; }
 
 /* 卡片与按钮 */
 html.app .card {
-  border-radius: 18px;
-  background: var(--grad-card);
-  border-color: rgba(208, 222, 212, .85);
-  box-shadow: 0 1px 2px rgba(23, 42, 41, .03), 0 14px 30px -26px rgba(23, 42, 41, .55), inset 0 1px 0 rgba(255, 255, 255, .9);
+  border-radius: 12px;
+  background: #ffffff;
+  border-color: #e4e8e0;
+  box-shadow: none;
 }
 
-html.app .lesson-card { transition: transform .2s ease, box-shadow .2s ease; }
-html.app .lesson-card:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 1px 2px rgba(23, 42, 41, .04), 0 22px 44px -32px rgba(23, 42, 41, .55);
-}
-html.app .lesson-card::before { background: var(--grad-primary); width: 5px; }
-html.app .lesson-card.draft::before { background: linear-gradient(180deg, #dcc39a, #b08a54); }
+html.app .lesson-card::before { background: #3f7a6a; width: 3px; }
+html.app .lesson-card.draft::before { background: #b99a6b; }
 
 html.app .section-title .dot {
-  background: var(--grad-primary);
-  box-shadow: 0 0 0 4px rgba(79, 135, 119, .1);
+  background: #3f7a6a;
+  box-shadow: none;
 }
 
-html.app .btn {
-  border-radius: 10px;
-  border-color: #e0e8e1;
-  background: linear-gradient(180deg, #ffffff, #fbfcfb);
-  transition: border-color .16s ease, background .16s ease, box-shadow .16s ease, transform .16s ease;
-}
-html.app .btn:hover {
-  background: linear-gradient(180deg, #ffffff, #f6faf7);
-  border-color: #cbdad0;
-  box-shadow: 0 6px 16px -12px rgba(23, 42, 41, .5);
-}
-
-html.app .btn.primary {
-  background: var(--grad-primary);
-  border-color: transparent;
-  color: #fff;
-  box-shadow: 0 12px 24px -18px rgba(31, 66, 60, .95), inset 0 1px 0 rgba(255, 255, 255, .18);
-}
-html.app .btn.primary:hover {
-  background: var(--grad-primary-hover);
-  border-color: transparent;
-  box-shadow: 0 14px 28px -16px rgba(31, 66, 60, .85), inset 0 1px 0 rgba(255, 255, 255, .22);
-}
-
-html.app .btn.amber { background: linear-gradient(135deg, #faf4ea, #f0e5d4); border-color: #eadcc6; color: var(--amber); }
 html.app .btn.ghost { background: transparent; color: var(--teal-dark); }
-html.app .btn.ghost:hover { background: linear-gradient(135deg, #eef5f0, #e6efe9); }
-html.app .btn.danger { background: #fff; border-color: #eed3d0; }
 
 /* 表单与标签 */
 html.app .input, html.app .textarea, html.app .select {
@@ -181,63 +141,48 @@ html.app .input:focus, html.app .textarea:focus, html.app .select:focus {
 
 html.app .tabs { border-bottom-color: rgba(216, 227, 218, .9); }
 html.app .tabs a { border-radius: 10px 10px 0 0; }
-html.app .tabs a:hover { background: linear-gradient(180deg, rgba(232, 241, 236, 0), rgba(232, 241, 236, .7)); }
-html.app .tabs a.active { color: var(--teal-dark); border-bottom-color: var(--teal); }
+html.app .tabs a:hover { background: #f3f5f0; }
+html.app .tabs a.active { color: var(--ink); }
 
-html.app table.tbl th { background: linear-gradient(180deg, #fbfcfb, #f6f9f6); }
-html.app table.tbl td { border-bottom-color: #eef2ed; }
-html.app table.tbl tr:hover td { background: #fafcf9; }
+html.app table.tbl th { background: #f7f8f3; }
+html.app table.tbl td { border-bottom-color: #edf0e9; }
+html.app table.tbl tr:hover td { background: #fafbf6; }
 
-html.app .stat { background: var(--grad-card); border-color: rgba(216, 227, 218, .9); }
-html.app .stat.teal .num {
-  background: var(--grad-primary);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
+html.app .stat { background: #ffffff; border-color: #e4e8e0; }
+html.app .stat.teal .num { color: #2f5c51; }
 
 html.app .badge-src { border-color: #d3e3da; background: #f4faf6; }
-html.app .banner.info { background: linear-gradient(135deg, #edf5f0, #e6f0ea); border-color: #d5e6dc; color: #24504a; }
-html.app .banner.ok { background: linear-gradient(135deg, #eef8f1, #e7f3ea); border-color: #cfe6d6; color: #1f6146; }
-html.app .banner.warn { background: linear-gradient(135deg, #fbf5ea, #f7eedd); border-color: #eeddc2; color: #7c5418; }
-html.app .banner.error { background: linear-gradient(135deg, #fcefed, #f9e8e6); border-color: #f0cfcb; color: var(--danger); }
+html.app .banner.info { background: #eef3ec; border-color: #dbe5d9; color: #2f4f45; }
+html.app .banner.ok { background: #eef6f0; border-color: #d3e5d8; color: #1f6146; }
+html.app .banner.warn { background: #f9f3e7; border-color: #e9dcc4; color: #7c5418; }
+html.app .banner.error { background: #fbf0ee; border-color: #eed3cf; color: var(--danger); }
 
 /* 登录 */
 html.app .login-left {
-  background: var(--grad-hero);
+  background: #173a33;
   isolation: isolate;
 }
 html.app .login-left::before {
   content: "";
   position: absolute; inset: 0;
-  background:
-    radial-gradient(760px 460px at 6% 2%, rgba(255, 255, 255, .2), transparent 58%),
-    radial-gradient(640px 420px at 96% 92%, rgba(217, 180, 131, .28), transparent 62%),
-    radial-gradient(700px 420px at 88% 8%, rgba(126, 178, 158, .3), transparent 60%);
+  background: linear-gradient(180deg, rgba(255, 255, 255, .04), transparent 46%);
   z-index: -1;
 }
 html.app .login-left::after {
-  width: 520px; height: 520px; right: -160px; bottom: -180px;
-  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, .18), rgba(255, 255, 255, .02) 62%, transparent 70%);
-  border: 1px solid rgba(255, 255, 255, .08);
+  width: 0; height: 0; display: none;
 }
-html.app .login-left .brandline { letter-spacing: .015em; text-shadow: 0 2px 18px rgba(0, 0, 0, .2); }
+html.app .login-left .brandline { letter-spacing: .01em; text-shadow: none; }
 html.app .login-left .lead { color: rgba(233, 244, 239, .92); }
 html.app .login-left .foot { color: rgba(209, 228, 219, .8); }
 html.app .login-points .p { color: rgba(226, 240, 234, .9); }
 html.app .flow-chips span {
-  background: rgba(255, 255, 255, .1);
-  border-color: rgba(255, 255, 255, .22);
-  backdrop-filter: blur(6px);
+  background: rgba(255, 255, 255, .08);
+  border-color: rgba(255, 255, 255, .2);
+  backdrop-filter: none;
 }
-html.app .login-right {
-  background:
-    radial-gradient(620px 400px at 102% 0%, rgba(232, 241, 236, .8), transparent 60%),
-    radial-gradient(420px 320px at 0% 100%, rgba(246, 239, 227, .7), transparent 62%),
-    linear-gradient(180deg, #ffffff 0%, #fbfcfa 100%);
-}
-html.app .demo-row { border-radius: 10px; transition: background .15s ease; }
-html.app .demo-row:hover { background: linear-gradient(135deg, #f3f9f5, #edf5f0); }
+html.app .login-right { background: #ffffff; }
+html.app .demo-row { border-radius: 8px; transition: background .15s ease; }
+html.app .demo-row:hover { background: #f3f5f0; }
 
 /* ---------------------------------------------------------------- 课堂版 */
 
@@ -458,20 +403,17 @@ html.app .top-title .t {
 
 html.app .page-head h1 {
   font-family: var(--font-serif);
-  font-size: 27px;
+  font-size: 24px;
   font-weight: 700;
-  letter-spacing: .015em;
-  line-height: 1.32;
-  background: linear-gradient(120deg, #1b3b35 0%, #2f5c51 62%, #4a7c6c 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  letter-spacing: .01em;
+  line-height: 1.3;
+  color: var(--ink);
 }
 
 html.app .page-head .sub {
   font-family: var(--font-kai);
-  font-size: 13.5px;
-  letter-spacing: .02em;
+  font-size: 14px;
+  letter-spacing: .01em;
 }
 
 html.app .card h3,
@@ -593,3 +535,115 @@ html.lab .hero h2 {
 
 html.lab .hero h2 { font-weight: 700; }
 
+
+
+/* ==========================================================================
+   正式版收口：平面、发丝边、单一强调色
+   依据 app-screens：卡片不投影，颜色只给数据与状态，导航与外壳保持中性。
+   ========================================================================== */
+
+html.app .card,
+html.app .stat,
+html.app .lesson-card { box-shadow: none; }
+
+html.app .lesson-card:hover { transform: none; box-shadow: none; }
+
+html.app .stat { padding: 18px 20px; }
+
+html.app .chip {
+  border: 1px solid #e3e8df;
+  background: #ffffff;
+}
+html.app .chip.teal { background: #eef2ea; border-color: #dde6da; }
+html.app .badge-src { background: #ffffff; border-color: #e3e8df; }
+
+html.app .demo-row { border: 1px solid transparent; }
+html.app .demo-row:hover { border-color: #e6ebe2; }
+
+/* 工作坊：米色平面 + 发丝边 */
+html.workshop body { font-size: 16px; }
+html.workshop header.site-header { background: #f7f6ef; border-bottom: 1px solid #e6e4d8; }
+html.workshop .brand-mark { background: #2f5c51; color: #fff; box-shadow: none; }
+html.workshop .hero-stage { background: #eef1e6; }
+html.workshop .sample-card,
+html.workshop .fruit-word { box-shadow: none; border: 1px solid #e4e4d6; }
+html.workshop .card { box-shadow: none; }
+
+/* 完整版：深绿平面 + 中性导航 */
+html.lab body { font-size: 15px; }
+html.lab aside.sidebar { background: #17332e; }
+html.lab .logo { background: #2f5c51; box-shadow: none; }
+html.lab a.nav-item.active { background: rgba(255, 255, 255, .08); color: #fff; }
+html.lab .hero { background: #1c3f38; box-shadow: none; }
+html.lab .stat,
+html.lab .col,
+html.lab .card { box-shadow: none; }
+
+/* 课堂版：页头实色，舞台不投影 */
+html.classroom header.bar { background: #173a33; }
+html.classroom section.stage,
+html.classroom a#games { box-shadow: none; }
+
+/* 答辩页：封面实色，展板去掉投影 */
+html.defense { background: #0d211d; }
+html.defense .word-board { box-shadow: none; border-color: rgba(217, 180, 131, .18); }
+
+
+
+/* 可读性下限：正文与标签不小于 13px */
+html.app .tiny,
+html.app .chip,
+html.app table.tbl th,
+html.app .side-group,
+html.app .side-foot,
+html.app .role-chip,
+html.app .top-title p,
+html.app .stat .extra,
+html.app .idx,
+html.app .lesson-card .meta { font-size: 13px; }
+
+html.app .side-group { letter-spacing: .06em; }
+html.app .chip { padding: 3px 9px; }
+html.app :is(.input, .textarea, .select) { box-shadow: none; }
+
+html.app .flow-chips span { font-size: 13px; }
+html.app .demo-title,
+html.app .demo-title span { font-size: 13px; }
+html.app .login-left .foot { font-size: 13px; }
+html.app .login-left .brandline { font-size: clamp(30px, 3vw, 42px); letter-spacing: .01em; }
+
+/* 完整版：小标签抬到 13px */
+html.lab .nav-group,
+html.lab .m,
+html.lab .stat-lbl,
+html.lab .brand-sub,
+html.lab .page-sub,
+html.lab .card-sub,
+html.lab .chip,
+html.lab .side-foot,
+html.lab .nav-item { font-size: 13px; }
+
+/* 工作坊：小标签抬到 13px */
+html.workshop .prompt-chip,
+html.workshop .sample-label,
+html.workshop .lesson-badge,
+html.workshop .sample-card small,
+html.workshop #bag-count,
+html.workshop .page-sub { font-size: 13px; }
+
+
+
+/* 工作坊：舞台改成有边框的画布，小标签抬到 13px */
+html.workshop .hero-stage {
+  background: #eef1e6;
+  border: 1px solid #e5e5d6;
+  border-radius: 14px;
+}
+html.workshop .sample-label,
+html.workshop #bag-count,
+html.workshop small,
+html.workshop .sample-card small { font-size: 13px; }
+
+
+html.lab .col-sub,
+html.lab .pill { font-size: 13px; }
