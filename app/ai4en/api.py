@@ -1167,6 +1167,155 @@ def api_revise(ctx):
     return 200, {"ok": True, "notice": "订正已提交，首次作答仍然保留。"}
 
 
+# ---------------------------------------------------------------- 学生端：学习概览
+
+@route("GET", "/api/student/overview")
+def api_student_overview(ctx):
+    """学生本人的学习档案：任务进度、错题、订正与时间线。
+
+    只返回本人数据，且不包含正确答案与解析（与学生任务接口一致）。
+    """
+    user = need_role(ctx, "student")
+    tasks = db.query(
+        """SELECT t.*, l.title AS lesson_title FROM tasks t JOIN lessons l ON l.id = t.lesson_id
+           WHERE t.class_id = ? AND t.status != 'draft' ORDER BY t.id DESC""",
+        (user["class_id"],))
+    subs = {}
+    for row in db.query("SELECT * FROM submissions WHERE student_id = ?", (user["id"],)):
+        subs[row["task_id"]] = row
+
+    wrong, feedbacks, revisions_out, timeline = [], [], [], []
+    tags = {}
+    correct_total = graded_total = 0
+    pending_revision = revised = 0
+    next_task = None
+
+    for task in tasks:
+        sub = subs.get(task["id"])
+        snapshot = db.loads(task["snapshot"])
+        items = snapshot.get("items", [])
+        if not sub:
+            if task["status"] == "ongoing" and next_task is None:
+                next_task = {"id": task["id"], "title": task["title"], "due_at": task["due_at"],
+                             "item_count": len(items), "reason": "还没提交"}
+            continue
+        if sub["status"] == "revision_requested":
+            pending_revision += 1
+            if next_task is None:
+                next_task = {"id": task["id"], "title": task["title"], "due_at": task["due_at"],
+                             "item_count": len(items), "reason": "老师要求订正"}
+        if sub["status"] == "resubmitted":
+            revised += 1
+
+        answers = db.loads(sub["answers"], {})
+        grading = db.loads(sub["grading"], {})
+        fbs = {f["item_id"]: f for f in db.query(
+            "SELECT * FROM feedback WHERE submission_id = ?", (sub["id"],))}
+        rev_rows = db.query("SELECT * FROM revisions WHERE submission_id = ? ORDER BY id", (sub["id"],))
+        first_answers = db.loads(rev_rows[0]["answers"], {}) if rev_rows else {}
+
+        for item in items:
+            ans = answers.get(item["id"], "")
+            ok = grading.get(item["id"])
+            tag = item.get("tag") or "未分类"
+            if item["type"] != "short":
+                if ok is None:
+                    continue
+                graded_total += 1
+                correct_total += 1 if ok else 0
+                bucket = tags.setdefault(tag, {"tag": tag, "correct": 0, "total": 0})
+                bucket["total"] += 1
+                bucket["correct"] += 1 if ok else 0
+                if ok is False:
+                    wrong.append({
+                        "task_id": task["id"], "task_title": task["title"], "item_id": item["id"],
+                        "type": item["type"], "stem": item.get("stem", ""), "tag": tag,
+                        "target": item.get("target", ""), "my_answer": ans,
+                        "feedback": "", "level": "",
+                    })
+            else:
+                fb = fbs.get(item["id"])
+                if not fb or fb["status"] != "confirmed":
+                    continue
+                feedbacks.append({
+                    "task_id": task["id"], "task_title": task["title"], "item_id": item["id"],
+                    "stem": item.get("stem", ""), "final": fb["final"], "level": fb["level"],
+                    "at": fb["confirmed_at"] or sub["updated_at"],
+                })
+                if fb["level"] in ("需局部修改", "需教师帮助"):
+                    original = first_answers.get(item["id"], ans) if first_answers else ans
+                    wrong.append({
+                        "task_id": task["id"], "task_title": task["title"], "item_id": item["id"],
+                        "type": "short", "stem": item.get("stem", ""), "tag": tag,
+                        "target": item.get("target", ""), "my_answer": original,
+                        "revised": ans if str(ans or "") != str(original or "") else "",
+                        "feedback": fb["final"], "level": fb["level"],
+                    })
+
+        timeline.append({"at": sub["submitted_at"], "kind": "submit",
+                         "title": "提交作业", "detail": task["title"]})
+        if sub["status"] == "resubmitted":
+            timeline.append({"at": sub["updated_at"], "kind": "revise",
+                             "title": "提交订正", "detail": task["title"]})
+
+        if rev_rows:
+            first = db.loads(rev_rows[0]["answers"], {})
+            changes = []
+            for item in items:
+                before = str(first.get(item["id"], "") or "")
+                after = str(answers.get(item["id"], "") or "")
+                if before != after:
+                    changes.append({
+                        "item_id": item["id"], "stem": item.get("stem", ""),
+                        "before": before, "after": after,
+                    })
+            revisions_out.append({
+                "task_id": task["id"], "task_title": task["title"], "submission_id": sub["id"],
+                "at": rev_rows[-1]["created_at"], "changes": changes,
+            })
+
+    for fb in feedbacks:
+        timeline.append({"at": fb["at"], "kind": "feedback",
+                         "title": "老师确认了反馈", "detail": fb["task_title"]})
+    timeline.sort(key=lambda e: e["at"] or "", reverse=True)
+
+    for task in tasks:
+        if task["status"] == "ended" and task["id"] not in subs and next_task is None:
+            next_task = {"id": task["id"], "title": task["title"], "due_at": task["due_at"],
+                         "item_count": len(db.loads(task["snapshot"]).get("items", [])), "reason": "已结束"}
+            break
+
+    assigned = len(tasks)
+    submitted = len(subs)
+    return 200, {
+        "student": {"name": user["name"], "class_name": ""},
+        "stats": {
+            "assigned": assigned,
+            "submitted": submitted,
+            "not_submitted": assigned - submitted,
+            "pending_revision": pending_revision,
+            "revised": revised,
+            "wrong": len(wrong),
+            "objective_correct": correct_total,
+            "objective_total": graded_total,
+            "accuracy": round(correct_total / graded_total * 100, 0) if graded_total else None,
+        },
+        "tags": sorted(tags.values(), key=lambda t: (-t["total"], t["tag"])),
+        "wrong": wrong,
+        "feedback": sorted(feedbacks, key=lambda f: f["at"] or "", reverse=True)[:8],
+        "revisions": sorted(revisions_out, key=lambda r: r["at"] or "", reverse=True),
+        "timeline": timeline[:12],
+        "next_task": next_task,
+        "tasks": [{
+            "id": t["id"], "title": t["title"], "lesson_title": t["lesson_title"],
+            "due_at": t["due_at"], "status": t["status"],
+            "item_count": len(db.loads(t["snapshot"]).get("items", [])),
+            "submission": {"id": subs[t["id"]]["id"], "status": subs[t["id"]]["status"],
+                           "submitted_at": subs[t["id"]]["submitted_at"]} if t["id"] in subs else None,
+        } for t in tasks],
+    }
+
+
 # ---------------------------------------------------------------- 家长端
 
 

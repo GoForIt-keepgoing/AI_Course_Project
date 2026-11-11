@@ -126,7 +126,10 @@ function pageMeta() {
   if (first === 'studio') return { title: '工具', sub: '拓展：工作坊与完整版' };
   if (first === 'guide') return { title: '帮助', sub: '使用指南与培训' };
   if (role === 'teacher') return { title: '工作台', sub: (S.user.class_name || '') + ' · 全部课例' };
-  if (role === 'student') return { title: '学习', sub: segs[1] === 'task' ? '作业作答' : '我的任务与订正' };
+  if (role === 'student') {
+    var stuSub = { '': '学习概览', tasks: '我的任务', wrong: '错题本', records: '订正记录', guide: '使用说明', task: '作业作答' };
+    return { title: '学习', sub: stuSub[segs[1] || ''] || '学习档案' };
+  }
   return { title: '孩子', sub: '只读查看任务与已确认反馈' };
 }
 
@@ -141,8 +144,16 @@ function shellNav() {
     items.push(['#/studio', '🧩', '拓展', first === 'studio']);
     items.push(['#/guide', '📘', '使用指南', first === 'guide']);
   } else if (role === 'student') {
+    var segs = S.route || [];
+    var sub = segs[1] || '';
     items.push(['group', '学习']);
-    items.push(['#/', '📝', '我的任务', true]);
+    items.push(['#/student', '🧭', '学习概览', sub === '']);
+    items.push(['#/student/tasks', '📝', '我的任务', sub === 'tasks' || sub === 'task']);
+    items.push(['group', '记录']);
+    items.push(['#/student/wrong', '🩹', '错题本', sub === 'wrong']);
+    items.push(['#/student/records', '🔁', '订正记录', sub === 'records']);
+    items.push(['group', '帮助']);
+    items.push(['#/student/guide', '📘', '使用说明', sub === 'guide']);
   } else {
     items.push(['group', '孩子']);
     items.push(['#/', '👪', '孩子任务', true]);
@@ -211,6 +222,7 @@ async function render() {
     if (segs[0] === 'lesson') main = await lessonView(parseInt(segs[1], 10), segs[2] || 'plan');
     else if (segs[0] === 'review') main = await reviewView(parseInt(segs[1], 10));
     else if (segs[0] === 'student' && segs[1] === 'task') main = await studentTaskView(parseInt(segs[2], 10));
+    else if (segs[0] === 'student') main = await studentView(segs[1] || '');
     else if (segs[0] === 'studio') main = studioView();
     else if (segs[0] === 'guide') main = guideView();
     else main = await homeView();
@@ -229,8 +241,7 @@ async function homeView() {
     return teacherHomeView(data.lessons);
   }
   if (S.user.role === 'student') {
-    var mine = await api('/api/my/tasks');
-    return studentHomeView(mine.tasks);
+    return studentView('');
   }
   var parent = await api('/api/parent/overview');
   return parentHomeView(parent);
