@@ -85,6 +85,28 @@ async function main() {
     const draft = await (await page.request.post(base + '/api/lessons/1/tasks', { data: {
       class_id: 1, title: '未发布草稿验收', allow_hints: true, show_result: 'immediately',
     } })).json();
+    await page.goto(base + '/#/lesson/1/tasks');
+    const taskTitle = page.locator('[data-state="taskForm"][data-bind="title"]');
+    await taskTitle.fill('尚未保存的新任务');
+    page.once('dialog', dialog => dialog.dismiss());
+    await page.locator('[data-act="tw-edit-task"][data-id="' + draft.task.id + '"]').click();
+    assert.equal(await taskTitle.inputValue(), '尚未保存的新任务', '取消切换应保留当前输入');
+    page.once('dialog', dialog => dialog.accept());
+    await page.locator('[data-act="tw-edit-task"][data-id="' + draft.task.id + '"]').click();
+    await page.getByText('编辑草稿任务', { exact: true }).waitFor();
+    assert.equal(await taskTitle.inputValue(), '未发布草稿验收', '放弃当前编辑后应载入选中的草稿');
+    const taskCountBefore = (await (await page.request.get(base + '/api/lessons/1/tasks')).json()).tasks.length;
+    await taskTitle.fill('已更新的草稿验收');
+    const savedTask = page.waitForResponse(response => response.url().endsWith('/api/tasks/' + draft.task.id) && response.request().method() === 'PATCH');
+    await page.getByRole('button', { name: '保存草稿', exact: true }).click();
+    assert.equal((await savedTask).status(), 200);
+    await page.getByText('已更新的草稿验收', { exact: true }).waitFor();
+    const tasksAfter = (await (await page.request.get(base + '/api/lessons/1/tasks')).json()).tasks;
+    assert.equal(tasksAfter.length, taskCountBefore, '保存选中草稿不应创建重复任务');
+    assert.equal(tasksAfter.find(task => task.id === draft.task.id).title, '已更新的草稿验收');
+    await page.getByLabel('当前课例', { exact: true }).selectOption('2');
+    await page.locator('h1', { hasText: 'My Family' }).waitFor();
+    assert.notEqual(await taskTitle.inputValue(), '已更新的草稿验收', '切换课例不应带入旧草稿');
     await page.goto(base + '/#/lesson/1/reviews?task=' + draft.task.id);
     await page.getByRole('heading', { name: '批改与订正', exact: true }).waitFor();
     assert.equal(await page.getByRole('link', { name: '查看与批改', exact: true }).count(), 0, '草稿不能显示其他任务的作答');

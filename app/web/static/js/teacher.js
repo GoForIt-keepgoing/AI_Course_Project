@@ -66,6 +66,14 @@ async function lessonView(id, tab) {
   S.planSource = lesson.plan.source;
   S.tasks = lesson.tasks;
 
+  // 放弃修改可能触发课例重置；初始化完成后再载入用户选择的草稿。
+  var requestedDraft = S.taskDraftToOpen;
+  S.taskDraftToOpen = null;
+  if (tab === 'tasks' && requestedDraft && requestedDraft.lessonId === id) {
+    var draft = S.tasks.find(function (t) { return t.id === requestedDraft.taskId && t.status === 'draft'; });
+    if (draft) S.taskForm = clone(draft);
+  }
+
   if (tab === 'results') return resultsTab(lesson);
   if (tab === 'reviews') return reviewsTab(lesson);
   if (tab === 'logs') return teachingLogsTab(lesson);

@@ -68,7 +68,7 @@ function teacherRemember(id) {
 async function teacherWorkspaceView(segs) {
   if (TW.userId !== S.user.id) {
     TW.userId = S.user.id; TW.current = null; TW.dirty.clear(); S.lesson = null; S.lessonId = null;
-    S.twLoadedLesson = null; S.taskForm = null; S.logForm = null;
+    S.twLoadedLesson = null; S.taskForm = null; S.logForm = null; S.taskDraftToOpen = null;
     try { TW.current = Number(localStorage.getItem('ai4en-teacher-current-' + S.user.id)) || null; } catch (_) {}
   }
   var data = await api('/api/lessons');
@@ -277,7 +277,7 @@ ACTIONS['tw-edit-task'] = function (el) {
   if (!teacherConfirmLeave()) return;
   var task = S.tasks.find(function (t) { return t.id === Number(el.dataset.id) && t.status === 'draft'; });
   if (!task) return;
-  S.taskForm = clone(task);
+  S.taskDraftToOpen = { lessonId: S.lesson.id, taskId: task.id };
   render();
 };
 /* 按钮增删/排序与文本输入同样属于未保存编辑；无实际变化时不提示。 */
