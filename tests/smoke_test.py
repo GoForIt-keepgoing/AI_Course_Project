@@ -20,6 +20,7 @@ import urllib.error
 import urllib.request
 import uuid
 import zipfile
+from datetime import datetime, timedelta
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 APP = os.path.join(ROOT, "app")
@@ -185,7 +186,8 @@ def main():
         # 9 新建任务并发布
         status, data, _ = teacher.post("/api/lessons/1/tasks", {
             "class_id": 1, "title": "验收任务 · Animals 短练习", "instructions": "按题目要求作答。",
-            "due_at": "2026-11-10 20:00", "allow_hints": True, "show_result": "immediately"})
+            "due_at": (datetime.now() + timedelta(days=7)).strftime("%Y-%m-%d %H:%M"),
+            "allow_hints": True, "show_result": "immediately"})
         task_id = data.get("task", {}).get("id")
         record("创建任务草稿", "HTTP 200 且状态为草稿", status == 200 and data["task"]["status"] == "draft",
                "HTTP " + str(status) + " 任务 " + str(task_id))
