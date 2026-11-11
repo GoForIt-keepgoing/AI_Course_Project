@@ -273,7 +273,7 @@ async function reviewView(sid) {
     '<div class="row">' + btn('要求订正', 'request-revision', 'data-id="' + sub.id + '"') +
     '<a class="btn" target="_blank" rel="noopener" href="/print/feedback/' + sub.id + '">打印反馈样例</a>' +
     '<a class="btn" href="#/lesson/' + task.lesson_id + '/reviews?task=' + task.id + '">返回批改列表</a></div></div>' +
-    '<div class="grid" style="grid-template-columns:minmax(0,1.4fr) minmax(0,.6fr)">' +
+    '<div class="grid review-layout">' +
     '<div>' + banner('客观题由代码判定；开放题请用“生成反馈草稿”后改写，点“确认反馈”后学生才可见。', 'info', 'i') +
     '<div style="margin-top:14px">' + itemHtml + '</div></div>' +
     '<div class="stack">' +

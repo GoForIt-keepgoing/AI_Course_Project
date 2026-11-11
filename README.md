@@ -93,12 +93,13 @@ python app/server.py --port 8848
     │  ├─ web/
     │  │  ├─ index.html             教学助手（教师 / 学生 / 家长）
     │  │  └─ static/
+    │  │     ├─ words/              词卡插画（由 animals 插画裁切，WebP）
     │  │     ├─ js/                 助手前端
     │  │     ├─ workshop/           AI 英语教学工作坊（找茬 / 提示词 / 游戏工坊 / 20 页培训）
     │  │     ├─ lab/                助教完整版（游戏闯关 / 数字人 / 思维导图 / 学情看板）
     │  │     └─ defense/            10 页 HTML 答辩演示
     │  └─ data/ai4en.db             演示数据库（首次启动生成）
-    ├─ tests/smoke_test.py          基线回归（45 项，可自建临时服务）
+    ├─ tests/smoke_test.py          基线回归（50 项，可自建临时服务）
     ├─ tests/acceptance.py          整合验收（35+ 项，连已有服务）
     ├─ tools/                       构建脚本（生成 PPTX/题库/验证记录/答辩稿）
     ├─ 交付物/                      课程大作业成果包
@@ -141,6 +142,9 @@ python app/server.py --port 8848
 - **材料可交付**：教案与任务单可打印为 PDF；课件可导出可编辑 PPTX；学生卷与教师答案分开。
 - **结果可核对**：统计来自真实提交记录；模型失败有提示并写入日志；示例内容、真实模型输出、规则生成、教师手工编辑分别标注。
 - **访问有范围**：教师仅本人课例与班级，学生仅本人任务与作答，家长仅绑定孩子；越界请求在后端返回 403。
+- **学生端有独立学习档案**：学习概览、我的任务、单词卡、错题本、订正记录、学习报告、使用说明，全部只读本人数据，不出现标准答案与班级排名。
+- **界面不使用 emoji**：界面图形全部为本地线性 SVG 图标（`static/theme/icons.js`），词卡与配图使用本地 WebP 插画（`static/illustrations/`、`static/words/`）。完整版历史内容里的 emoji 会在渲染前由 `static/theme/emoji.js` 统一替换为图标或移除。
+- **素材来源**：页面插画为项目内生成图（`static/illustrations/README.md`）；动物词卡来自 Icons8 Color 图标集（免费许可，需标注），见 `static/words/CREDITS.md`。
 
 ---
 
@@ -195,7 +199,7 @@ python app/server.py --port 8848
     py tests\acceptance.py http://127.0.0.1:8851
     py tests\lab_test.py http://127.0.0.1:8848
 
-`smoke_test.py` 会在临时目录建独立数据库并另起服务，跑完 45 项回归用例；设置 `AI4EN_BASE` 时则直接连已有服务。
+`smoke_test.py` 会在临时目录建独立数据库并另起服务，跑完 50 项回归用例；设置 `AI4EN_BASE` 时则直接连已有服务。
 `acceptance.py` 连一个已启动的临时服务，跑 35 项整合验收（工作坊入口、局部再生成、课堂观察、听写、截止时间等）。
 `lab_test.py` 对已启动的服务检查完整版入口、脚本、`hasKey` 与未配置 Key 时的 503。
 三套脚本都输出“预期 / 实际”，不会写入演示数据库。结果同步记录在 交付物/03_验证记录/验证记录.md、验证记录.xlsx，

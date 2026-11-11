@@ -26,8 +26,8 @@ function guideView(embedded) {
       '<div class="stack" style="margin-top:14px">' + g.prompts.map(function (p, i) {
         return '<div class="prompt-card"><div class="row" style="justify-content:space-between">' +
           '<div><h3>' + esc(p.title) + '</h3><div class="tiny muted">' + esc(p.scene) + '</div></div>' +
-          btn('复制提示词', 'copy-prompt', 'data-i="' + i + '"', 'sm primary') + '</div>' +
-          '<pre>' + esc(p.body) + '</pre><div class="tiny muted">' + esc(p.note) + '</div></div>';
+          btn('复制提示词', 'copy-prompt', 'data-i="' + i + '"', 'sm') + '</div>' +
+          '<details class="prompt-detail"><summary>查看提示词全文</summary><pre>' + esc(p.body) + '</pre></details><div class="tiny muted">' + esc(p.note) + '</div></div>';
       }).join('') + '</div>';
   } else if (tab === 'training') {
     body = '<div class="card"><div class="section-title"><span class="dot"></span>60 分钟教师工作坊</div>' +
@@ -67,7 +67,7 @@ function guideView(embedded) {
       '<li>PDF 由打印视图生成（浏览器“另存为 PDF”或交付目录中的同名 PDF）。</li></ul></div>';
   } else {
     body = '<div class="stack">' + g.faq.map(function (item) {
-      return '<div class="card"><h3>' + esc(item[0]) + '</h3><p class="small muted" style="margin-top:6px">' + esc(item[1]) + '</p></div>';
+      return '<details class="faq-item"><summary>' + esc(item[0]) + '</summary><p>' + esc(item[1]) + '</p></details>';
     }).join('') + '</div>';
   }
 
@@ -108,6 +108,13 @@ ACTIONS['copy-prompt'] = async function (el) {
 };
 
 function afterRender() {
+  document.querySelectorAll('.field').forEach(function (field, i) {
+    var label = field.querySelector('label');
+    var input = field.querySelector('input:not([type="hidden"]), textarea, select');
+    if (!label || !input || label.htmlFor || label.contains(input)) return;
+    input.id = input.id || 'view-field-' + i;
+    label.htmlFor = input.id;
+  });
   window.scrollTo(0, 0);
 }
 

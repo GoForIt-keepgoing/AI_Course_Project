@@ -2,17 +2,17 @@
 'use strict';
 
 var TEACHER_MODULES = [
-  { group: '教学总览', key: 'home', label: '工作台', icon: '⌂' },
-  { group: '教学总览', key: 'lessons', label: '课例库', icon: '▤' },
-  { group: '课前与课堂', key: 'plan', label: '教案备课', icon: '✎' },
-  { group: '课前与课堂', key: 'slides', label: '课件与教具', icon: '▧' },
-  { group: '课前与课堂', key: 'activities', label: '课堂互动', icon: '◇' },
-  { group: '课前与课堂', key: 'exercises', label: '练习与命题', icon: '☷' },
-  { group: '课后与评价', key: 'tasks', label: '任务管理', icon: '▣' },
-  { group: '课后与评价', key: 'reviews', label: '批改与订正', icon: '✓' },
-  { group: '课后与评价', key: 'results', label: '学情分析', icon: '▥' },
-  { group: '课后与评价', key: 'logs', label: '教学日志', icon: '▦' },
-  { group: '教师支持', key: 'guide', label: '教师成长与帮助', icon: '?' }
+  { group: '教学总览', key: 'home', label: '工作台', icon: 'home' },
+  { group: '教学总览', key: 'lessons', label: '课例库', icon: 'book' },
+  { group: '课前与课堂', key: 'plan', label: '教案备课', icon: 'task' },
+  { group: '课前与课堂', key: 'slides', label: '课件与教具', icon: 'cards' },
+  { group: '课前与课堂', key: 'activities', label: '课堂互动', icon: 'compass' },
+  { group: '课前与课堂', key: 'exercises', label: '练习与命题', icon: 'task' },
+  { group: '课后与评价', key: 'tasks', label: '任务管理', icon: 'calendar' },
+  { group: '课后与评价', key: 'reviews', label: '批改与订正', icon: 'rotate' },
+  { group: '课后与评价', key: 'results', label: '学情分析', icon: 'chart' },
+  { group: '课后与评价', key: 'logs', label: '教学日志', icon: 'book' },
+  { group: '教师支持', key: 'guide', label: '教师成长与帮助', icon: 'book' }
 ];
 var TW = { lessons: [], current: null, userId: null, hash: '', dirty: new Set(), allowLeave: false };
 
@@ -42,7 +42,7 @@ function teacherNav() {
     return '<details class="tw-nav-group" open><summary>' + group + '</summary>' +
       TEACHER_MODULES.filter(function (m) { return m.group === group; }).map(function (m) {
         return '<a href="' + teacherHref(m.key, TW.current) + '"' +
-          (m.key === active ? ' class="active" aria-current="page"' : '') + '><span class="ico" aria-hidden="true">' + m.icon + '</span>' + m.label + '</a>';
+          (m.key === active ? ' class="active" aria-current="page"' : '') + '><span class="ico" aria-hidden="true">' + icon(m.icon) + '</span>' + m.label + '</a>';
       }).join('') + '</details>';
   }).join('');
 }

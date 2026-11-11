@@ -21,7 +21,7 @@ async function main() {
       await new Promise(resolve => setTimeout(resolve, 100));
     }
     browser = await chromium.launch({ headless: true, channel: 'chrome' });
-    page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
+    page = await browser.newPage({ viewport: { width: 1440, height: 1000 }, reducedMotion: 'reduce' });
     page.on('response', async response => {
       if (response.status() >= 400 && !response.url().endsWith('/api/me')) console.log('HTTP', response.status(), response.url(), await response.text());
     });
@@ -148,6 +148,12 @@ async function main() {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.screenshot({ path: path.join(root, '.tmp', 'teacher-workspace-tested-mobile.png'), fullPage: true });
     assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true, '小屏不得横向溢出');
+    await page.getByLabel('展开或收起页面导航').click();
+    assert.equal(await page.locator('.mobile-nav a').count(), 11, '移动菜单应保留全部教师模块');
+    await page.getByRole('navigation', { name: '移动端页面导航' }).getByRole('link', { name: '学情分析', exact: true }).click();
+    await page.getByRole('heading', { name: '学情分析', exact: true }).waitFor();
+    assert.equal(await page.locator('.mobile-menu[open]').count(), 0, '导航后应收起移动菜单');
+    await page.setViewportSize({ width: 1440, height: 1000 });
     await page.getByRole('button', { name: '退出', exact: true }).click();
     await page.locator('#username').fill('p_zhang');
     await page.locator('#password').fill('par123');
@@ -159,7 +165,11 @@ async function main() {
     await page.locator('#password').fill('stu123');
     await page.getByRole('button', { name: '进入工作台', exact: true }).click();
     await page.waitForSelector('.side-nav');
-    assert.equal(await page.locator('.side-nav a').count(), 1);
+    assert.equal(await page.locator('.side-nav a').count(), 7, '保留同学新增的七个学生模块');
+    for (const label of ['学习概览', '我的任务', '单词卡', '错题本', '订正记录', '学习报告', '使用说明']) {
+      await page.getByRole('navigation', { name: '主要导航' }).getByRole('link', { name: label, exact: true }).click();
+      await page.getByRole('heading', { name: label, exact: true }).waitFor();
+    }
     await page.getByRole('button', { name: '退出', exact: true }).click();
     await page.locator('#username').fill('t_li');
     await page.locator('#password').fill('teach123');
@@ -170,6 +180,15 @@ async function main() {
     await page.getByRole('button', { name: '打印与下载', exact: true }).click();
     await page.getByText('先在课例库创建或选择课例，再准备本课资源。', { exact: true }).waitFor();
     assert.equal(await page.locator('a[href*="null"],a[href*="undefined"],a[href*="task//"]').count(), 0);
+    await page.getByRole('navigation', { name: '主要导航' }).getByRole('link', { name: '课例库', exact: true }).click();
+    await page.getByRole('button', { name: '新建课例', exact: true }).click();
+    await page.locator('#newLesson [name="title"]').fill('合并验收新课例');
+    await page.locator('#newLesson [name="topic"]').fill('Animals');
+    await page.locator('#newLesson [name="vocab"]').fill('cat, dog');
+    await page.getByRole('button', { name: '创建并备课', exact: true }).click();
+    await page.locator('h1', { hasText: '合并验收新课例' }).waitFor();
+    await page.locator('#sec-cond').waitFor();
+    assert.equal((await (await page.request.get(base + '/api/lessons')).json()).lessons.length, 1, '新弹窗只应创建一份课例');
     assert.deepEqual(errors, []);
     console.log('PASS: teacher navigation, context, logs, unsaved edits, filters, observations, resources, mobile and role regression');
   } catch (error) {
